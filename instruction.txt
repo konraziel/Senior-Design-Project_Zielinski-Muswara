@@ -1,0 +1,44 @@
+Instructions for project setup and for using Godot with Git (IN PROGRESS)
+
+1. Have Git installed:
+    1a. Install most recent release or update to most recent release version
+        You can keep most installation setting for Git as the default or recommended depending on preference
+
+        reference for updating Git: https://phoenixnap.com/kb/how-to-update-git
+            NOTE: You may have to disable your File or Web shield if you have an antivirus installed for some of the updating options for Windows.
+    
+    1b. Set up global configs for Git
+        In terminal run the following commands:
+            git config --global user.name "your name"
+            git config --global user.email your@email.com
+            git config --global core.autocrlf input
+            git config --list --show-origin (to verify config settings)
+
+2. Install Godot Engine -.NET LTS 3.5.3 (https://godotengine.org/download/3.x/windows/)
+    2a. Extract downloaded zip folder and extract to directory of your choice
+
+(MAYBE SKIP STEP 3 FOR NOW, WE CAN PROB IMPLEMENT C# AT LATER DATE)
+3. Install Visual Studio Community 2022 (https://visualstudio.microsoft.com/vs/)
+    I dont remember if i did any specific stuff for this, I installed it 2 semesters ago for a class so I already had it set up.
+
+    3a. Sign in with your Github account or your Email
+
+4. Setting up VS code
+(NOTE: YOU CAN PROBABLY SKIP STEP 4b FOR NOW)
+    4a. Make sure you have the "C# Dev Kit" Extension installed. If not, install it from the Extensions page
+        NOTE: current repository is not setup with C# (refer to https://www.youtube.com/watch?v=Yi1iIM-B7XQ&ab_channel=Gamefromscratch for setup, will do later)
+    4b. Once you do, if you installed Visual Studio 2022, press f1 key and select ".NET: Sign into Visual Studio account"
+
+    (optional but recommended) For convinience feel free to install "GitHub Pull Requests and Issues" extension and "godot-tools" extension
+
+5. Cloning the respository
+    5a. Clone the repo into desired folder using the github url (https://github.com/konraziel/Senior-Design-Project_Zielinski-Muswara)
+        Can do this easily with the Github extension by pressing f1 and selecting "Git: Clone" and pasting in the link
+
+    5b. Run "git status" to make sure everything is up to date
+
+6. Importing project into godot
+    6a. Run Godot Engine
+        Select "Import" option, and navigate to the project.godot file in the repo
+
+DONE (Hopefully?)
