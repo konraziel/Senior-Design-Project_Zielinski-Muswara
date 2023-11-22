@@ -11,10 +11,13 @@ extents = Vector3( 1.09414, 2.13613, 1.09078 )
 [node name="SDmap1" parent="." instance=ExtResource( 1 )]
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.24736, -2.33875 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.95996, 5.27782, -4.02895 )
 mesh = ExtResource( 2 )
 
 [node name="RigidBody" type="RigidBody" parent="MeshInstance"]
 
 [node name="CollisionShape" type="CollisionShape" parent="MeshInstance/RigidBody"]
 shape = SubResource( 1 )
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( -0.999063, 0.0213839, 0.0376227, 0.0297936, 0.970414, 0.239601, -0.031386, 0.240497, -0.970142, 0, 9.52221, -25.3733 )
