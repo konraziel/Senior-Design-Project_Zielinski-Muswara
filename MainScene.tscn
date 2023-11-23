@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://models/map/SDmap1.dae" type="PackedScene" id=1]
 [ext_resource path="res://models/playermodel.obj" type="ArrayMesh" id=2]
+[ext_resource path="res://player.gd" type="Script" id=3]
 
 [sub_resource type="CapsuleShape" id=1]
 margin = 1.0
@@ -15,13 +16,14 @@ height = 2.0
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( -0.999063, 0.0213839, 0.0376227, 0.0297936, 0.970414, 0.239601, -0.031386, 0.240497, -0.970142, 0, 9.52221, -25.3733 )
 
-[node name="RigidBody" type="RigidBody" parent="."]
-transform = Transform( 0.903245, 0.429124, 0, -0.429124, 0.903245, 0, 0, 0, 1, 5.95996, 5.27782, -4.02895 )
+[node name="KinematicBody" type="KinematicBody" parent="."]
+script = ExtResource( 3 )
 
-[node name="CollisionShape" type="CollisionShape" parent="RigidBody"]
-transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
+[node name="CollisionShape" type="CollisionShape" parent="KinematicBody"]
+transform = Transform( 0.903245, -1.87576e-08, -0.429124, -0.429124, -3.94821e-08, -0.903245, 0, 1, -4.37114e-08, 5.95996, 5.27782, -4.02895 )
 shape = SubResource( 1 )
 
-[node name="MeshInstance" type="MeshInstance" parent="RigidBody"]
+[node name="MeshInstance" type="MeshInstance" parent="KinematicBody"]
+transform = Transform( 0.903245, 0.429124, 0, -0.429124, 0.903245, 0, 0, 0, 1, 5.95996, 5.27782, -4.02895 )
 mesh = ExtResource( 2 )
 skeleton = NodePath("../..")
