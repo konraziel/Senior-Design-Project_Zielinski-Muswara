@@ -1,0 +1,15 @@
+Ideas for end of this semester:
+
+NEED TO ASK PROFESSOR SPECIFICALLY WHAT HE WOULD LIKE US TO IMPLEMENT
+(ALSO ASK FOR DEADLINE)
+
+Make a more humanoid model (lets us display newtonian physics easier?) - (Konrad - will start working on this)
+
+better physical simulation (reference online sources)
+
+have player character interact with some environmental rigid bodies
+
+make a larger map with textures (Alhamza - maybe waterfall demo as well?)
+
+Implement some basic fps fuctions (shooting projectiles, destructive rigid bodies(???))
+
