@@ -1,6 +1,6 @@
 extends KinematicBody
 
-# Declare member variables here. Examples:
+
 var speed = 7.0
 var gravity = 50
 var velocity = Vector3.ZERO
@@ -8,6 +8,23 @@ var snap_vector = Vector3.DOWN
 var mouse_sensitivity = 0.002  # radians/pixel
 
 export var jump_strength = 20
+
+onready var interaction=$PlayerHead/Camera/interaction
+onready var hand = $PlayerHead/Camera/hand
+
+
+var picked_object
+var pull_strength
+
+
+func pick_object():
+	var collider = interaction.get_collider()
+	if collider != null and collider is RigidBody:
+		picked_object=collider
+		print("smfoe")
+
+
+
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -31,6 +48,8 @@ func _process(delta):
 		input_vector.x -= 1
 	if Input.is_action_pressed("ui_right"):
 		input_vector.x += 1
+	if Input.is_action_just_pressed("f"):
+		pick_object()
 	
 	var camera_transform = $PlayerHead/Camera.get_global_transform()
 	var camera_basis = camera_transform.basis
@@ -50,3 +69,11 @@ func _process(delta):
 		snap_vector = Vector3.DOWN
 	
 	velocity= move_and_slide_with_snap(velocity, snap_vector, Vector3.UP, true)
+	
+	if picked_object != null:
+		var a = picked_object.global_transform.origin
+		var b = hand.global_transform.origin
+		picked_object.set_linear_velocity((b-a))
+
+
+
