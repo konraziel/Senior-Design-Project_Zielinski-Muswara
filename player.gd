@@ -51,6 +51,11 @@ func _process(delta):
 	if Input.is_action_just_pressed("f"):
 		pick_object()
 	
+	if Input.is_action_pressed("alt"):
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	
 	var camera_transform = $PlayerHead/Camera.get_global_transform()
 	var camera_basis = camera_transform.basis
 	input_vector = camera_basis.xform(input_vector).normalized()
@@ -73,7 +78,7 @@ func _process(delta):
 	if picked_object != null:
 		var a = picked_object.global_transform.origin
 		var b = hand.global_transform.origin
-		picked_object.set_linear_velocity((b-a))
+		picked_object.set_linear_velocity((b-a)*4)
 
 
 
