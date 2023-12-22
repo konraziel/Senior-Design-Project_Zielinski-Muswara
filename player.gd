@@ -2,12 +2,12 @@ extends KinematicBody
 
 
 var speed = 7.0
-var gravity = 50
+var gravity = 9.8
 var velocity = Vector3.ZERO
 var snap_vector = Vector3.DOWN
 var mouse_sensitivity = 0.002  # radians/pixel
 
-export var jump_strength = 20
+var jump_strength = 4.5
 
 onready var interaction=$PlayerHead/Camera/interaction
 onready var hand = $PlayerHead/Camera/hand
@@ -33,6 +33,7 @@ func _unhandled_input(event):
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		$PlayerHead.rotate_y(-event.relative.x * mouse_sensitivity)
 		$PlayerHead/Camera.rotate_x(-event.relative.y * mouse_sensitivity)
+		$PlayerHead.rotation.y = wrapf($PlayerHead.rotation.y, deg2rad(0), deg2rad(360))
 		$PlayerHead/Camera.rotation.x = clamp($PlayerHead/Camera.rotation.x, -1.2, 1.2)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
