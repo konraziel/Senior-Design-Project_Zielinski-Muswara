@@ -22,7 +22,9 @@ func pick_object():
 	if collider != null and collider is RigidBody3D:
 		picked_object=collider
 		print("smfoe")
-
+func unpick_object():
+	if picked_object != null:
+		picked_object=null
 
 
 
@@ -50,7 +52,11 @@ func _process(delta):
 	if Input.is_action_pressed("ui_right"):
 		input_vector.x += 1
 	if Input.is_action_just_pressed("f"):
-		pick_object()
+		if picked_object== null:
+			pick_object()
+		elif picked_object != null:
+			unpick_object()
+
 	
 	if Input.is_action_pressed("alt"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
