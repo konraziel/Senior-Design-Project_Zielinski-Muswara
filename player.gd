@@ -62,10 +62,8 @@ func _process(delta):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	else:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	
-	var camera_transform = $PlayerHead/Camera3D.get_global_transform()
-	var camera_basis = camera_transform.basis
-	input_vector = camera_basis * (input_vector).normalized()
+
+	input_vector = $PlayerHead.transform.basis * (input_vector).normalized()
 	
 	velocity.x= input_vector.x *speed
 	velocity.z= input_vector.z *speed
