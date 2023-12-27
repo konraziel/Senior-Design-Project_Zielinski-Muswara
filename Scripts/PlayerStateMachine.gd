@@ -17,17 +17,19 @@ func _ready():
 func _process(delta):
 	if current_state:
 		current_state.update(delta) 
-		
+	Global.debug.add_property("Current State", current_state.name, 1)
+
 func _physics_process(delta):
 	if current_state:
 		current_state.physics_update(delta)
-func on_child_transition(state,new_stae_name):
+func on_child_transition(state,new_state_name):
 	if state != current_state:
 		return 
-	var new_state = states.get(new_stae_name.to_lower())
+	var new_state = states.get(new_state_name.to_lower())
 	if !new_state:
 		return
 	if current_state:
 		current_state.exit()
 	new_state.enter()
 	current_state=new_state 
+	

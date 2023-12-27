@@ -21,7 +21,6 @@ func pick_object():
 	var collider = interaction.get_collider()
 	if collider != null and collider is RigidBody3D:
 		picked_object=collider
-		print("smfoe")
 func unpick_object():
 	if picked_object != null:
 		picked_object=null

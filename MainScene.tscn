@@ -1,8 +1,13 @@
-[gd_scene load_steps=10 format=3 uid="uid://43qjrlvxlbh3"]
+[gd_scene load_steps=15 format=3 uid="uid://43qjrlvxlbh3"]
 
 [ext_resource type="PackedScene" uid="uid://din6jmxk2hpwy" path="res://models/map/SDmap1.dae" id="1"]
 [ext_resource type="ArrayMesh" uid="uid://c7q65byxpkij4" path="res://models/playermodel.obj" id="2"]
 [ext_resource type="Script" path="res://player.gd" id="3"]
+[ext_resource type="Script" path="res://Scripts/DebugPanel.gd" id="4_ah14x"]
+[ext_resource type="Theme" uid="uid://dsvo6bwrch0kp" path="res://ui/themes/debug.tres" id="4_dk3xy"]
+[ext_resource type="Script" path="res://Scripts/PlayerStateMachine.gd" id="4_sr8ny"]
+[ext_resource type="Script" path="res://Scripts/IdleState.gd" id="5_5je4a"]
+[ext_resource type="Script" path="res://Scripts/WalkingState.gd" id="6_njexr"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_rr4pq"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -64,6 +69,34 @@ target_position = Vector3(0, 0, -5)
 
 [node name="hand" type="Marker3D" parent="player/PlayerHead/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.50571)
+
+[node name="UI" type="Node" parent="player"]
+
+[node name="DebugPanel" type="Panel" parent="player/UI"]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 210.0
+offset_bottom = 50.0
+theme = ExtResource("4_dk3xy")
+script = ExtResource("4_ah14x")
+
+[node name="MarginContainer" type="MarginContainer" parent="player/UI/DebugPanel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="player/UI/DebugPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="PlayerStateMachine" type="Node" parent="player" node_paths=PackedStringArray("initial_state")]
+script = ExtResource("4_sr8ny")
+initial_state = NodePath("IdleState")
+
+[node name="IdleState" type="Node" parent="player/PlayerStateMachine"]
+script = ExtResource("5_5je4a")
+
+[node name="WalkingState" type="Node" parent="player/PlayerStateMachine"]
+script = ExtResource("6_njexr")
 
 [node name="RigidBody3D" type="RigidBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.602048, 3.0288, -3.83641)
