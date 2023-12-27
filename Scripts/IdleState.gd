@@ -1,0 +1,3 @@
+# Idle.gd
+extends State
+
