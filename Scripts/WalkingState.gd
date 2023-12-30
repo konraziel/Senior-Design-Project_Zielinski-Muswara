@@ -1,6 +1,6 @@
 extends State
 
-@export var inputvector : Vector3
+@export var input_vector:Vector3
 
 func update(_delta: float) :
 	pass
@@ -8,8 +8,10 @@ func update(_delta: float) :
 
 
 func physics_update(_delta: float) :
-	if inputvector.x== 0 and inputvector.y==0: 
+	print(input_vector.x)
+	if input_vector.x == 0 and input_vector.y==0: 
 		Transition.emit(self, "idlestate")
+	
 
 
 func enter():

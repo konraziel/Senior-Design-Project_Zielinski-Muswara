@@ -10,6 +10,7 @@ func _ready():
 	for child in get_children():
 		if child is State:
 			states[child.name.to_lower()] = child
+			print(child.name)
 			child.Transition.connect(on_child_transition)
 	if initial_state:
 		initial_state.enter()
@@ -17,6 +18,7 @@ func _ready():
 func _process(delta):
 	if current_state:
 		current_state.update(delta) 
+	print(current_state.name)
 	Global.debug.add_property("Current State", current_state.name, 1)
 
 func _physics_process(delta):
