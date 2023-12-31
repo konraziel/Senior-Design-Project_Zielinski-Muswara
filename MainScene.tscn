@@ -1,13 +1,15 @@
-[gd_scene load_steps=15 format=3 uid="uid://43qjrlvxlbh3"]
+[gd_scene load_steps=17 format=3 uid="uid://43qjrlvxlbh3"]
 
 [ext_resource type="PackedScene" uid="uid://din6jmxk2hpwy" path="res://models/map/SDmap1.dae" id="1"]
+[ext_resource type="Script" path="res://MainScene.gd" id="1_n8q15"]
 [ext_resource type="ArrayMesh" uid="uid://c7q65byxpkij4" path="res://models/playermodel.obj" id="2"]
-[ext_resource type="Script" path="res://player.gd" id="3"]
+[ext_resource type="Script" path="res://models/player.gd" id="3"]
 [ext_resource type="Script" path="res://Scripts/DebugPanel.gd" id="4_ah14x"]
 [ext_resource type="Theme" uid="uid://dsvo6bwrch0kp" path="res://ui/themes/debug.tres" id="4_dk3xy"]
 [ext_resource type="Script" path="res://Scripts/PlayerStateMachine.gd" id="4_sr8ny"]
 [ext_resource type="Script" path="res://Scripts/IdleState.gd" id="5_5je4a"]
 [ext_resource type="Script" path="res://Scripts/WalkingState.gd" id="6_njexr"]
+[ext_resource type="PackedScene" uid="uid://cjek1vgj0atul" path="res://playermodel.tscn" id="9_tl5y2"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_rr4pq"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -32,6 +34,7 @@ height = 4.29747
 [sub_resource type="BoxMesh" id="3"]
 
 [node name="Node3D" type="Node3D"]
+script = ExtResource("1_n8q15")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
@@ -106,3 +109,6 @@ shape = SubResource("2")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D"]
 mesh = SubResource("3")
+
+[node name="playermodel" parent="." instance=ExtResource("9_tl5y2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.238453, -9.92642)
