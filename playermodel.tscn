@@ -1,6 +1,8 @@
-[gd_scene load_steps=19 format=3 uid="uid://cjek1vgj0atul"]
+[gd_scene load_steps=21 format=3 uid="uid://cjek1vgj0atul"]
 
 [ext_resource type="Script" path="res://models/playermodel.gd" id="1_k5emc"]
+[ext_resource type="Theme" uid="uid://dsvo6bwrch0kp" path="res://ui/themes/debug.tres" id="2_juaya"]
+[ext_resource type="Script" path="res://Scripts/DebugPanel.gd" id="3_pjivu"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_002ww"]
 resource_name = "Material"
@@ -701,18 +703,18 @@ animation = &"walkright"
 
 [sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_x5c50"]
 blend_point_0/node = SubResource("AnimationNodeAnimation_uasce")
-blend_point_0/pos = Vector2(0.5, 0.5)
+blend_point_0/pos = Vector2(0, 0)
 blend_point_1/node = SubResource("AnimationNodeAnimation_5x8tk")
-blend_point_1/pos = Vector2(0.5, 1)
+blend_point_1/pos = Vector2(0, 1)
 blend_point_2/node = SubResource("AnimationNodeAnimation_pyr06")
-blend_point_2/pos = Vector2(0, 0.5)
+blend_point_2/pos = Vector2(-1, 0)
 blend_point_3/node = SubResource("AnimationNodeAnimation_v2jck")
-blend_point_3/pos = Vector2(0.5, 0)
+blend_point_3/pos = Vector2(0, -1)
 blend_point_4/node = SubResource("AnimationNodeAnimation_tmyk4")
-blend_point_4/pos = Vector2(1, 0.5)
-min_space = Vector2(0, 0)
+blend_point_4/pos = Vector2(1, 0)
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_w236q"]
+graph_offset = Vector2(32.0363, 30.9306)
 nodes/BlendSpace2D/node = SubResource("AnimationNodeBlendSpace2D_x5c50")
 nodes/BlendSpace2D/position = Vector2(347, 98)
 nodes/output/position = Vector2(780, 120)
@@ -882,7 +884,6 @@ libraries = {
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-visible = false
 shape = SubResource("CapsuleShape3D_ii1gq")
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
@@ -891,4 +892,22 @@ libraries = {
 }
 tree_root = SubResource("AnimationNodeBlendTree_w236q")
 anim_player = NodePath("../AnimationPlayer")
-parameters/BlendSpace2D/blend_position = Vector2(0.5, 0.5)
+parameters/BlendSpace2D/blend_position = Vector2(0, 0)
+
+[node name="UI" type="Node" parent="."]
+
+[node name="DebugPanel" type="Panel" parent="UI"]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 210.0
+offset_bottom = 50.0
+theme = ExtResource("2_juaya")
+script = ExtResource("3_pjivu")
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/DebugPanel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/DebugPanel/MarginContainer"]
+layout_mode = 2

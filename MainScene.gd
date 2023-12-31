@@ -3,7 +3,7 @@ extends Node3D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	remove_child($playermodel) # use this to disable the old avatar
+	remove_child($player) # use this to disable an avatar you are not using
 	#pass
 
 
