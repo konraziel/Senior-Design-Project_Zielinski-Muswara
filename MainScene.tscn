@@ -1,9 +1,9 @@
 [gd_scene load_steps=17 format=3 uid="uid://43qjrlvxlbh3"]
 
 [ext_resource type="PackedScene" uid="uid://din6jmxk2hpwy" path="res://models/map/SDmap1.dae" id="1"]
-[ext_resource type="Script" path="res://MainScene.gd" id="1_n8q15"]
+[ext_resource type="Script" path="res://Scripts/MainScene.gd" id="1_n8q15"]
 [ext_resource type="ArrayMesh" uid="uid://c7q65byxpkij4" path="res://models/playermodel.obj" id="2"]
-[ext_resource type="Script" path="res://models/player.gd" id="3"]
+[ext_resource type="Script" path="res://Scripts/player.gd" id="3"]
 [ext_resource type="Script" path="res://Scripts/DebugPanel.gd" id="4_ah14x"]
 [ext_resource type="Theme" uid="uid://dsvo6bwrch0kp" path="res://ui/themes/debug.tres" id="4_dk3xy"]
 [ext_resource type="Script" path="res://Scripts/PlayerStateMachine.gd" id="4_sr8ny"]

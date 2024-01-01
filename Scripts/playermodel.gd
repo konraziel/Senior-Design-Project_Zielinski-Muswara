@@ -40,55 +40,45 @@ func _unhandled_input(event):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	# Input handling
-	var input_vector = Vector3.ZERO
 
-	if Input.is_action_pressed("ui_up"):
-		input_vector.z -= 1
-	if Input.is_action_pressed("ui_down"):
-		input_vector.z += 1
-	if Input.is_action_pressed("ui_left"):
-		input_vector.x -= 1
-	if Input.is_action_pressed("ui_right"):
-		input_vector.x += 1
+	if Input.is_action_pressed("alt"):
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	
+	# Input handling
+	var input_vector = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	input_vector = Vector3(input_vector.x, 0, input_vector.y)
+	
 	if Input.is_action_just_pressed("f"):
 		if picked_object== null:
 			pick_object()
 		elif picked_object != null:
 			unpick_object()
 	
-	if Input.is_action_pressed("alt"):
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	else:
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	
-	input_vector = $Armature.transform.basis * (input_vector).normalized()
+	var armature_direction = $Armature.transform.basis
+	var direction = armature_direction * (input_vector).normalized()
 	
 	#Global.debug.add_property("x vector", input_vector.x, 1)
 	#Global.debug.add_property("z vector", input_vector.z, 2)
 	
-	velocity.x= lerp(velocity.x, input_vector.x * speed, LERP_VAL)
-	velocity.z= lerp(velocity.z, input_vector.z * speed, LERP_VAL)
+	velocity.x= lerp(velocity.x, direction.x * speed, LERP_VAL)
+	velocity.z= lerp(velocity.z, direction.z * speed, LERP_VAL)
 	velocity.y-= gravity * delta
 	
-	Global.debug.add_property("x velocity", velocity.x, 1)
-	Global.debug.add_property("z velocity", velocity.z, 2)
+	Global.debug.add_property("x velocity", velocity.x, 2)
+	Global.debug.add_property("y velocity", velocity.y, 3)
+	Global.debug.add_property("z velocity", velocity.z, 4)
 	
-	var just_landed = is_on_floor() and snap_vector == Vector3.ZERO
-	var is_jumping = is_on_floor() and Input.is_action_pressed("ui_select")
-	
-	#Global.debug.add_property("just_landed", just_landed, 3)
+	var is_jumping = is_on_floor() and Input.is_action_pressed("jump")
 	
 	if is_jumping:
 		velocity.y= jump_strength
-		snap_vector= Vector3.ZERO
-	elif just_landed:
-		snap_vector = Vector3.DOWN
 	
 	var basis_inverse = $Armature.transform.basis.inverse()
-	var normal_init_input = basis_inverse * input_vector
+	var normal_init_input = basis_inverse * direction
 	
-	Global.debug.add_property("initial input vector", normal_init_input, 3)
+	Global.debug.add_property("initial input vector", normal_init_input, 4)
 	
 	var anim_movement_set = Vector2(normal_init_input.x, -normal_init_input.z)
 	anim_tree.set("parameters/BlendSpace2D/blend_position", anim_movement_set)
