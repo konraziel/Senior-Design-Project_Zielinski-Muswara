@@ -8,8 +8,8 @@ func update(_delta: float) :
 
 
 func physics_update(_delta: float) :
-	pass
-	if Global.player.velocity.length()==0: 
+	#pass
+	if Global.player.normal_init_input.length()==0: 
 		Transition.emit(self, "idlestate")
 	
 

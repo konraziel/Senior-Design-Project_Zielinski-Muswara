@@ -6,6 +6,7 @@ var gravity = 9.8
 var snap_vector = Vector3.DOWN
 var mouse_sensitivity = 0.002  # radians/pixel
 const LERP_VAL = .01
+var normal_init_input:Vector3
 
 var jump_strength = 4.5
 
@@ -77,7 +78,7 @@ func _process(delta):
 		velocity.y= jump_strength
 	
 	var basis_inverse = $Armature.transform.basis.inverse()
-	var normal_init_input = basis_inverse * direction
+	normal_init_input = basis_inverse * direction
 	
 	Global.debug.add_property("initial input vector", normal_init_input, 4)
 	
