@@ -1,6 +1,8 @@
 extends CharacterBody3D
 
+# Input handling
 
+var input_vector:Vector3
 var speed = 7.0
 var gravity = 9.8
 #var velocity = Vector3.ZERO
@@ -28,6 +30,9 @@ func unpick_object():
 
 
 func _ready():
+	
+	Global.player=self
+	
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _unhandled_input(event):
@@ -39,8 +44,7 @@ func _unhandled_input(event):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	# Input handling
-	var input_vector = Vector3.ZERO
+	input_vector = Vector3.ZERO
 
 	if Input.is_action_pressed("ui_up"):
 		input_vector.z -= 1

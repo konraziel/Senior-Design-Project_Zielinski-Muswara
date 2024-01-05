@@ -90,7 +90,7 @@ layout_mode = 2
 
 [node name="PlayerStateMachine" type="Node" parent="player" node_paths=PackedStringArray("initial_state")]
 script = ExtResource("4_sr8ny")
-initial_state = NodePath("WalkingState")
+initial_state = NodePath("IdleState")
 
 [node name="IdleState" type="Node" parent="player/PlayerStateMachine"]
 script = ExtResource("5_5je4a")
