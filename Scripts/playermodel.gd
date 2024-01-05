@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-
+var input_vector:Vector3
 var speed = 4.0
 var gravity = 9.8
 var snap_vector = Vector3.DOWN
@@ -29,6 +29,7 @@ func unpick_object():
 
 
 func _ready():
+	Global.player=self
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _unhandled_input(event):

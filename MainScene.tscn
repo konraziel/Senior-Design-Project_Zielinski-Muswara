@@ -9,7 +9,7 @@
 [ext_resource type="Script" path="res://Scripts/PlayerStateMachine.gd" id="4_sr8ny"]
 [ext_resource type="Script" path="res://Scripts/IdleState.gd" id="5_5je4a"]
 [ext_resource type="Script" path="res://Scripts/WalkingState.gd" id="6_njexr"]
-[ext_resource type="PackedScene" uid="uid://cjek1vgj0atul" path="res://playermodel.tscn" id="9_tl5y2"]
+[ext_resource type="PackedScene" uid="uid://8kfpe6od13cl" path="res://playermodel.tscn" id="9_tl5y2"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_rr4pq"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)

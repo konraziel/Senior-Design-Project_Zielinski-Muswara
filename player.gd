@@ -31,7 +31,7 @@ func unpick_object():
 
 func _ready():
 	
-	
+	Global.player=self
 	
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
@@ -60,9 +60,9 @@ func _process(delta):
 		elif picked_object != null:
 			unpick_object()
 
-	Global.debug.add_property("x vector", input_vector.x, 3)
-	Global.debug.add_property("y vector", input_vector.y, 4)
-	Global.debug.add_property("z vector", input_vector.z, 5)
+	#Global.debug.add_property("x vector", input_vector.x, 2)
+	#Global.debug.add_property("y vector", input_vector.y, 3)
+	#Global.debug.add_property("z vector", input_vector.z, 4)
 	if Input.is_action_pressed("alt"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	else:
@@ -77,7 +77,6 @@ func _process(delta):
 	var just_landed = is_on_floor() and snap_vector == Vector3.ZERO
 	var is_jumping = is_on_floor() and Input.is_action_pressed("ui_select")
 	
-	Global.debug.add_property("just_landed", just_landed, 3)
 	
 	if is_jumping:
 		velocity.y= jump_strength
