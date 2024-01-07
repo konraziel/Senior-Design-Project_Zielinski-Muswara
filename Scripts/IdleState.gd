@@ -9,7 +9,7 @@ func update(_delta: float) :
 
 func physics_update(_delta: float) :
 	#pass
-	if Global.player.normal_init_input.length() != 0: 
+	if Global.player.input_vector.length() != 0: 
 		Transition.emit(self, "walkingstate")
 
 

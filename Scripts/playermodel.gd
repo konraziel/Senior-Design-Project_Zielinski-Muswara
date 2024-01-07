@@ -6,7 +6,7 @@ var gravity = 9.8
 var snap_vector = Vector3.DOWN
 var mouse_sensitivity = 0.002  # radians/pixel
 const LERP_VAL = .01
-var normal_init_input:Vector3
+var anim_movement = Vector3.ZERO
 
 var jump_strength = 4.5
 
@@ -49,8 +49,8 @@ func _process(delta):
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
 	# Input handling
-	var input_vector = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
-	input_vector = Vector3(input_vector.x, 0, input_vector.y)
+	var input = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	input_vector = Vector3(input.x, 0, input.y)
 	
 	if Input.is_action_just_pressed("f"):
 		if picked_object== null:
@@ -77,12 +77,14 @@ func _process(delta):
 	if is_jumping:
 		velocity.y= jump_strength
 	
-	var basis_inverse = $Armature.transform.basis.inverse()
-	normal_init_input = basis_inverse * direction
+	#var basis_inverse = armature_direction.inverse()
+	#normal_init_input = basis_inverse * direction
+	anim_movement.x = lerp(anim_movement.x, input_vector.x, LERP_VAL)
+	anim_movement.z = lerp(anim_movement.z, input_vector.z, LERP_VAL)
 	
-	Global.debug.add_property("initial input vector", normal_init_input, 4)
+	Global.debug.add_property("animation vector", anim_movement, 4)
 	
-	var anim_movement_set = Vector2(normal_init_input.x, -normal_init_input.z)
+	var anim_movement_set = Vector2(anim_movement.x, -anim_movement.z)
 	anim_tree.set("parameters/BlendSpace2D/blend_position", anim_movement_set)
 	
 	# TODOConverter3To4 looks that snap in Godot 4 is float, not vector like in Godot 3 - previous value `snap_vector`
