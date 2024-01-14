@@ -6,8 +6,8 @@
 script = ExtResource("1_0f1vc")
 Weapon_Name = "Rifle"
 Activate_Anim = "Rifle_Activation"
-Shoot_Anim = ""
-Reload_Anim = ""
+Shoot_Anim = "Rifle_Shoot"
+Reload_Anim = "Rifle_Reload"
 Deactivate_Anim = ""
 Out_Of_Ammo_Anim = ""
 Current_Ammo = 0
