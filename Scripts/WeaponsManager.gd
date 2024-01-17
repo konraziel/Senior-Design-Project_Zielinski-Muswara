@@ -21,7 +21,7 @@ func Initialize(_Start_Weapons: Array):
 		Weapon_Stack.push_back(i) # Add our start weapons
 
 	Current_Weapon = Weapon_List[Weapon_Stack[0]] # set the first weapon in the stack to current
-
+	_enter()
 
 func _enter():
 	Animation_Player.queue(Current_Weapon.Activate_Anim)
