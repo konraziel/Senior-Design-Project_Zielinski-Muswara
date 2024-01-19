@@ -17,10 +17,10 @@ func _ready():
 func _input(event):
 	if event.is_action_pressed('Weapon_UP'):
 		Weapon_Indicator = min(Weapon_Indicator+1,Weapon_Stack.size()-1)
-		exit(Weapon_Stack[Weapon_Indicator])
+		_exit(Weapon_Stack[Weapon_Indicator])
 	if event.is_action_pressed('Weapon_DOWN'):
 		Weapon_Indicator = max(Weapon_Indicator-1,0)
-		exit(Weapon_Stack[Weapon_Indicator])
+		_exit(Weapon_Stack[Weapon_Indicator])
 	
 func Initialize(_Start_Weapons: Array):
 	for weapon in _weapon_resources:
@@ -29,24 +29,21 @@ func Initialize(_Start_Weapons: Array):
 		Weapon_Stack.push_back(i) # Add our start weapons
 
 	Current_Weapon = Weapon_List[Weapon_Stack[0]] # set the first weapon in the stack to current
-	enter()
+	_enter()
 
-func enter():
+func _enter():
 	Animation_Player.queue(Current_Weapon.Activate_Anim)
 
-func exit(_next_weapon : String):
+func _exit(_next_weapon : String):
 	if _next_weapon != Current_Weapon.Weapon_Name:
 		if Animation_Player.get_current_animation() != Current_Weapon.Deactivate_Anim:
 			Animation_Player.play(Current_Weapon.Deactivate_Anim)
 			Next_Weapon=_next_weapon
 
-func Change_Weapon(weapon_name : String):
-	var Weapon_Index = Weapon_Stack.find(weapon_name)
-	if Weapon_Index == -1:
-		Current_Weapon = Weapon_List[Weapon_Stack[Weapon_Index]]
-		Next_Weapon = ""
-		enter()
-
+func Change_Weapon(weapon_name:String):
+	Current_Weapon=Weapon_List[weapon_name]
+	Next_Weapon=''
+	_enter()
 
 
 func _on_animation_guns_animation_finished(anim_name):
