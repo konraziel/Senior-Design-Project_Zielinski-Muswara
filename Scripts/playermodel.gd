@@ -15,6 +15,7 @@ var jump_strength = 4.5
 @onready var anim_tree = $AnimationTree
 
 
+
 var picked_object
 var pull_strength
 
