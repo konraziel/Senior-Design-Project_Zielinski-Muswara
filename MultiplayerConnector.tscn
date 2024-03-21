@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://cripaiuh03557"]
+
+[ext_resource type="Script" path="res://Scripts/NetworkController.gd" id="1_f22lb"]
+
+[node name="Multiplayer" type="Node"]
+script = ExtResource("1_f22lb")
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Host" type="Button" parent="UI"]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="Connect" type="Button" parent="UI"]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0

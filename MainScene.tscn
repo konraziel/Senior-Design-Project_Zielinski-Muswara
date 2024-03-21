@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://43qjrlvxlbh3"]
+[gd_scene load_steps=11 format=3 uid="uid://43qjrlvxlbh3"]
 
 [ext_resource type="PackedScene" uid="uid://din6jmxk2hpwy" path="res://models/map/SDmap1.dae" id="1"]
 [ext_resource type="Script" path="res://Scripts/MainScene.gd" id="1_n8q15"]
 [ext_resource type="Script" path="res://Scripts/WorldObjects/physics_target.gd" id="3_jfain"]
+[ext_resource type="PackedScene" uid="uid://cripaiuh03557" path="res://MultiplayerConnector.tscn" id="5_k8bdt"]
 [ext_resource type="PackedScene" uid="uid://8kfpe6od13cl" path="res://playermodel.tscn" id="9_tl5y2"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_rr4pq"]
@@ -50,3 +51,5 @@ mesh = SubResource("3")
 
 [node name="playermodel" parent="." instance=ExtResource("9_tl5y2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.238453, -9.92642)
+
+[node name="Multiplayer" parent="." instance=ExtResource("5_k8bdt")]
