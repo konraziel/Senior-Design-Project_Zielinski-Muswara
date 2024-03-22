@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://din6jmxk2hpwy" path="res://models/map/SDmap1.dae" id="1"]
 [ext_resource type="Script" path="res://Scripts/MainScene.gd" id="1_n8q15"]
 [ext_resource type="Script" path="res://Scripts/WorldObjects/physics_target.gd" id="3_jfain"]
-[ext_resource type="PackedScene" uid="uid://cripaiuh03557" path="res://MultiplayerConnector.tscn" id="5_k8bdt"]
+[ext_resource type="PackedScene" uid="uid://dfdaawcbb1gqt" path="res://MultiplayerConnector.tscn" id="5_k8bdt"]
 [ext_resource type="PackedScene" uid="uid://8kfpe6od13cl" path="res://playermodel.tscn" id="9_tl5y2"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_rr4pq"]
