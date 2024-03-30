@@ -11,12 +11,22 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Host" type="Button" parent="UI"]
+[node name="Net" type="VBoxContainer" parent="UI"]
 layout_mode = 0
-offset_right = 8.0
-offset_bottom = 8.0
+offset_right = 40.0
+offset_bottom = 40.0
 
-[node name="Connect" type="Button" parent="UI"]
-layout_mode = 0
-offset_right = 8.0
-offset_bottom = 8.0
+[node name="Options" type="HBoxContainer" parent="UI/Net"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/Net/Options"]
+layout_mode = 2
+
+[node name="Host" type="Button" parent="UI/Net/Options"]
+layout_mode = 2
+
+[node name="Connect" type="Button" parent="UI/Net/Options"]
+layout_mode = 2
+
+[node name="Remote" type="LineEdit" parent="UI/Net/Options"]
+layout_mode = 2

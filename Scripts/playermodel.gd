@@ -17,6 +17,7 @@ var jump_strength = 4.5
 
 
 var picked_object
+var mouse_capture = true
 var pull_strength
 
 
@@ -28,7 +29,12 @@ func unpick_object():
 	if picked_object != null:
 		picked_object=null
 
-
+func mouse_capture_true():
+	mouse_capture = true
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+func mouse_capture_false():
+	mouse_capture = false
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 func _ready():
 	Global.player=self
@@ -44,10 +50,11 @@ func _unhandled_input(event):
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 
-	if Input.is_action_pressed("alt"):
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	else:
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	if Input.is_action_just_pressed("alt"):
+		if mouse_capture == false:
+			mouse_capture_true()
+		elif mouse_capture != false:
+			mouse_capture_false()
 	
 	# Input handling
 	var input = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
