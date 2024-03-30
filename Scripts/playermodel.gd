@@ -80,8 +80,9 @@ func _process(delta):
 	
 	#var basis_inverse = armature_direction.inverse()
 	#normal_init_input = basis_inverse * direction
-	anim_movement.x = lerp(anim_movement.x, input_vector.x, LERP_VAL)
-	anim_movement.z = lerp(anim_movement.z, input_vector.z, LERP_VAL)
+	var anim_vector = armature_direction.inverse() * velocity / speed
+	anim_movement.x = anim_vector.x #lerp(anim_movement.x, input_vector.x, LERP_VAL)
+	anim_movement.z = anim_vector.z #lerp(anim_movement.z, input_vector.z, LERP_VAL)
 	
 	Global.debug.add_property("animation vector", anim_movement, 4)
 	
