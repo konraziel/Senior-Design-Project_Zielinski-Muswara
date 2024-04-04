@@ -1,10 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://43qjrlvxlbh3"]
+[gd_scene load_steps=10 format=3 uid="uid://43qjrlvxlbh3"]
 
-[ext_resource type="PackedScene" uid="uid://din6jmxk2hpwy" path="res://models/map/SDmap1.dae" id="1"]
 [ext_resource type="Script" path="res://Scripts/MainScene.gd" id="1_n8q15"]
+[ext_resource type="PackedScene" uid="uid://bssjacvcu8k3u" path="res://models/map/testing_grounds.tscn" id="2_s4w6h"]
 [ext_resource type="Script" path="res://Scripts/WorldObjects/physics_target.gd" id="3_jfain"]
 [ext_resource type="PackedScene" uid="uid://dfdaawcbb1gqt" path="res://MultiplayerConnector.tscn" id="5_k8bdt"]
-[ext_resource type="PackedScene" uid="uid://8kfpe6od13cl" path="res://playermodel.tscn" id="9_tl5y2"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_rr4pq"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -23,7 +22,7 @@ glow_enabled = true
 
 [sub_resource type="BoxMesh" id="3"]
 
-[node name="Node3D" type="Node3D"]
+[node name="World" type="Node3D"]
 script = ExtResource("1_n8q15")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
@@ -33,14 +32,11 @@ shadow_enabled = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_2s6ti")
 
-[node name="SDmap1" parent="." instance=ExtResource("1")]
-
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(-0.999063, 0.0213839, 0.0376227, 0.0393875, 0.809466, 0.585844, -0.0179267, 0.586777, -0.80955, 0, 9.52221, -19.9386)
-current = true
+[node name="TestingGrounds" parent="." instance=ExtResource("2_s4w6h")]
 
 [node name="RigidBody3D" type="RigidBody3D" parent="." groups=["Target"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.602048, 3.0288, -3.83641)
+visible = false
 script = ExtResource("3_jfain")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
@@ -49,7 +45,8 @@ shape = SubResource("2")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D"]
 mesh = SubResource("3")
 
-[node name="playermodel" parent="." instance=ExtResource("9_tl5y2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.238453, -9.92642)
-
 [node name="Multiplayer" parent="." instance=ExtResource("5_k8bdt")]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://playermodel.tscn")
+spawn_path = NodePath("../Multiplayer")

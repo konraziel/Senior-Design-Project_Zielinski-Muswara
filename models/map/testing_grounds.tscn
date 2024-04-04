@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://bssjacvcu8k3u"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_uuwhi"]
+size = Vector3(20, 0.05, 20)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_jksfr"]
+data = PackedVector3Array(-10, 0.025, 10, 10, 0.025, 10, -10, -0.025, 10, 10, 0.025, 10, 10, -0.025, 10, -10, -0.025, 10, 10, 0.025, -10, -10, 0.025, -10, 10, -0.025, -10, -10, 0.025, -10, -10, -0.025, -10, 10, -0.025, -10, 10, 0.025, 10, 10, 0.025, -10, 10, -0.025, 10, 10, 0.025, -10, 10, -0.025, -10, 10, -0.025, 10, -10, 0.025, -10, -10, 0.025, 10, -10, -0.025, -10, -10, 0.025, 10, -10, -0.025, 10, -10, -0.025, -10, 10, 0.025, 10, -10, 0.025, 10, 10, 0.025, -10, -10, 0.025, 10, -10, 0.025, -10, 10, 0.025, -10, -10, -0.025, 10, 10, -0.025, 10, -10, -0.025, -10, 10, -0.025, 10, 10, -0.025, -10, -10, -0.025, -10)
+
+[node name="TestingGrounds" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_uuwhi")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_jksfr")

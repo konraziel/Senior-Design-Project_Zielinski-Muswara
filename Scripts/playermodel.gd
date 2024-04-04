@@ -7,19 +7,16 @@ var snap_vector = Vector3.DOWN
 var mouse_sensitivity = 0.002  # radians/pixel
 const LERP_VAL = .01
 var anim_movement = Vector3.ZERO
-
 var jump_strength = 4.5
 
-@onready var interaction=$Armature/PlayerHead/Camera3D/interaction
+@onready var camera = $Armature/PlayerHead/Camera3D
+@onready var interaction = $Armature/PlayerHead/Camera3D/interaction
 @onready var hand = $Armature/PlayerHead/Camera3D/hand
 @onready var anim_tree = $AnimationTree
-
-
 
 var picked_object
 var mouse_capture = true
 var pull_strength
-
 
 func pick_object():
 	var collider = interaction.get_collider()
@@ -36,11 +33,21 @@ func mouse_capture_false():
 	mouse_capture = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
+func _enter_tree():
+	set_multiplayer_authority(str(name).to_int())
+
 func _ready():
-	Global.player=self
+	# -- This is breaking the instances if its put in, similar line of code in _unhandled_input and _process
+	# -- The point of this is to make sure that the server and client can only control their corresponding player
+	#if not is_multiplayer_authority(): return
+	
+	Global.player = self
+	camera.current = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _unhandled_input(event):
+	#if not is_multiplayer_authority(): return
+	
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		$Armature.rotate_y(-event.relative.x * mouse_sensitivity)
 		$Armature/PlayerHead/Camera3D.rotate_x(-event.relative.y * mouse_sensitivity)
@@ -49,6 +56,7 @@ func _unhandled_input(event):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	#if not is_multiplayer_authority(): return
 
 	if Input.is_action_just_pressed("alt"):
 		if mouse_capture == false:
