@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://8kfpe6od13cl"]
+[gd_scene load_steps=49 format=3 uid="uid://8kfpe6od13cl"]
 
 [ext_resource type="Script" path="res://Scripts/playermodel.gd" id="1_k5emc"]
 [ext_resource type="PackedScene" uid="uid://c1q625ijn10vr" path="res://models/rifle.glb" id="2_disx4"]
@@ -2920,6 +2920,17 @@ nodes/BlendSpace2D/node = SubResource("AnimationNodeBlendSpace2D_mlea4")
 nodes/BlendSpace2D/position = Vector2(420, 80)
 nodes/output/position = Vector2(940, 100)
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_vl8bc"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("Armature/PlayerHead/Camera3D:rotation")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
 [node name="playermodel" type="CharacterBody3D"]
 collision_layer = 2
 script = ExtResource("1_k5emc")
@@ -3184,6 +3195,9 @@ script = ExtResource("5_4trf1")
 
 [node name="WalkingState" type="Node" parent="PlayerStateMachine"]
 script = ExtResource("6_cgf5a")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_vl8bc")
 
 [connection signal="Update_Ammo" from="Armature/PlayerHead/Camera3D/WeaponsManager" to="CanvasLayer" method="_on_weapons_manager_update_ammo"]
 [connection signal="Update_Weapon_Stack" from="Armature/PlayerHead/Camera3D/WeaponsManager" to="." method="_on_weapons_manager_update_weapon_stack"]
