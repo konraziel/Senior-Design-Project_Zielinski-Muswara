@@ -3111,7 +3111,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.79454, -0.0249233)
 
 [node name="Camera3D" type="Camera3D" parent="Armature/PlayerHead"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.104781)
-current = true
 
 [node name="interaction" type="RayCast3D" parent="Armature/PlayerHead/Camera3D"]
 target_position = Vector3(0, 0, -1.3)

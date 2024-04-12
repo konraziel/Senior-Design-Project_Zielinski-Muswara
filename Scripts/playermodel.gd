@@ -39,14 +39,14 @@ func _enter_tree():
 func _ready():
 	# -- This is breaking the instances if its put in, similar line of code in _unhandled_input and _process
 	# -- The point of this is to make sure that the server and client can only control their corresponding player
-	#if not is_multiplayer_authority(): return
+	if not is_multiplayer_authority(): return
 	
 	Global.player = self
 	camera.current = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _unhandled_input(event):
-	#if not is_multiplayer_authority(): return
+	if not is_multiplayer_authority(): return
 	
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		$Armature.rotate_y(-event.relative.x * mouse_sensitivity)
@@ -56,7 +56,7 @@ func _unhandled_input(event):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	#if not is_multiplayer_authority(): return
+	if not is_multiplayer_authority(): return
 
 	if Input.is_action_just_pressed("alt"):
 		if mouse_capture == false:
