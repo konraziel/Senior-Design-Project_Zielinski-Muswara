@@ -1,9 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://43qjrlvxlbh3"]
+[gd_scene load_steps=6 format=3 uid="uid://43qjrlvxlbh3"]
 
 [ext_resource type="Script" path="res://Scripts/MainScene.gd" id="1_n8q15"]
 [ext_resource type="PackedScene" uid="uid://bssjacvcu8k3u" path="res://models/map/testing_grounds.tscn" id="2_s4w6h"]
-[ext_resource type="Script" path="res://Scripts/WorldObjects/physics_target.gd" id="3_jfain"]
-[ext_resource type="PackedScene" uid="uid://dfdaawcbb1gqt" path="res://MultiplayerConnector.tscn" id="5_k8bdt"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_rr4pq"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -18,10 +16,6 @@ sky = SubResource("Sky_hleju")
 tonemap_mode = 2
 glow_enabled = true
 
-[sub_resource type="BoxShape3D" id="2"]
-
-[sub_resource type="BoxMesh" id="3"]
-
 [node name="World" type="Node3D"]
 script = ExtResource("1_n8q15")
 
@@ -33,20 +27,3 @@ shadow_enabled = true
 environment = SubResource("Environment_2s6ti")
 
 [node name="TestingGrounds" parent="." instance=ExtResource("2_s4w6h")]
-
-[node name="RigidBody3D" type="RigidBody3D" parent="." groups=["Target"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.602048, 3.0288, -3.83641)
-visible = false
-script = ExtResource("3_jfain")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
-shape = SubResource("2")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D"]
-mesh = SubResource("3")
-
-[node name="Multiplayer" parent="." instance=ExtResource("5_k8bdt")]
-
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://playermodel.tscn")
-spawn_path = NodePath("../Multiplayer")
