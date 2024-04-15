@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://8kfpe6od13cl"]
+[gd_scene load_steps=45 format=3 uid="uid://8kfpe6od13cl"]
 
 [ext_resource type="Script" path="res://Scripts/playermodel.gd" id="1_k5emc"]
 [ext_resource type="PackedScene" uid="uid://c1q625ijn10vr" path="res://models/rifle.glb" id="2_disx4"]
@@ -7,11 +7,7 @@
 [ext_resource type="Resource" uid="uid://dx0acmsbtvvjd" path="res://WeaponResources/rifle.tres" id="3_evaxh"]
 [ext_resource type="Script" path="res://Scripts/DebugPanel.gd" id="3_pjivu"]
 [ext_resource type="Resource" uid="uid://c5jg8samrhnvw" path="res://WeaponResources/submachinegun.tres" id="4_1osql"]
-[ext_resource type="Script" path="res://Scripts/PlayerStateMachine.gd" id="4_novjd"]
-[ext_resource type="Script" path="res://Scripts/IdleState.gd" id="5_4trf1"]
 [ext_resource type="PackedScene" uid="uid://cwhjrsrqc2qy6" path="res://models/submachinegun.glb" id="5_l1phk"]
-[ext_resource type="Script" path="res://Scripts/WalkingState.gd" id="6_cgf5a"]
-[ext_resource type="Script" path="res://Scripts/HUD.gd" id="12_hf8j0"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_002ww"]
 resource_name = "Material"
@@ -2915,12 +2911,11 @@ blend_point_4/node = SubResource("AnimationNodeAnimation_h5aah")
 blend_point_4/pos = Vector2(0, 0)
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_w236q"]
-graph_offset = Vector2(394, 22)
 nodes/BlendSpace2D/node = SubResource("AnimationNodeBlendSpace2D_mlea4")
 nodes/BlendSpace2D/position = Vector2(420, 80)
 nodes/output/position = Vector2(940, 100)
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_vl8bc"]
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_jwjd1"]
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/replication_mode = 1
@@ -2934,46 +2929,6 @@ properties/2/replication_mode = 1
 [node name="playermodel" type="CharacterBody3D"]
 collision_layer = 2
 script = ExtResource("1_k5emc")
-
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-script = ExtResource("12_hf8j0")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
-offset_right = 137.0
-offset_bottom = 77.0
-
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-text = "Current Weapon:
-"
-
-[node name="CurrentWeapon" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-text = "Ammo:
-"
-
-[node name="CurrentAmmo" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-
-[node name="HBoxContainer3" type="HBoxContainer" parent="CanvasLayer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer3"]
-layout_mode = 2
-text = "Weapon Stack:
-"
-
-[node name="WeaponStack" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer3"]
-layout_mode = 2
 
 [node name="Armature" type="Node3D" parent="."]
 
@@ -3186,21 +3141,8 @@ offset_bottom = 40.0
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/DebugPanel/MarginContainer"]
 layout_mode = 2
 
-[node name="PlayerStateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
-script = ExtResource("4_novjd")
-initial_state = NodePath("IdleState")
-
-[node name="IdleState" type="Node" parent="PlayerStateMachine"]
-script = ExtResource("5_4trf1")
-
-[node name="WalkingState" type="Node" parent="PlayerStateMachine"]
-script = ExtResource("6_cgf5a")
-
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_vl8bc")
+replication_config = SubResource("SceneReplicationConfig_jwjd1")
 
-[connection signal="Update_Ammo" from="Armature/PlayerHead/Camera3D/WeaponsManager" to="CanvasLayer" method="_on_weapons_manager_update_ammo"]
 [connection signal="Update_Weapon_Stack" from="Armature/PlayerHead/Camera3D/WeaponsManager" to="." method="_on_weapons_manager_update_weapon_stack"]
-[connection signal="Update_Weapon_Stack" from="Armature/PlayerHead/Camera3D/WeaponsManager" to="CanvasLayer" method="_on_weapons_manager_update_weapon_stack"]
-[connection signal="Weapon_Changed" from="Armature/PlayerHead/Camera3D/WeaponsManager" to="CanvasLayer" method="_on_weapons_manager_weapon_changed"]
 [connection signal="animation_finished" from="Armature/PlayerHead/Camera3D/WeaponsManager/FPS_Rig/AnimationGuns" to="Armature/PlayerHead/Camera3D/WeaponsManager" method="_on_animation_guns_animation_finished"]
