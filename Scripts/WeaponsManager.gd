@@ -21,6 +21,7 @@ enum {NULL, HITSCAN, PROJECTILE}
 
 func _ready():
 	Initialize(Start_Weapons)
+
 func _input(event):
 	if not is_multiplayer_authority(): return
 	
@@ -31,9 +32,9 @@ func _input(event):
 		Weapon_Indicator = max(Weapon_Indicator-1,0)
 		_exit(Weapon_Stack[Weapon_Indicator])
 	if event.is_action_pressed('Shoot'):
-		shoot()
+		shoot.rpc()
 	if event.is_action_pressed('Reload'):
-		reload()
+		reload.rpc()
 
 #@rpc("call_local")
 func Initialize(_Start_Weapons: Array):
@@ -44,13 +45,15 @@ func Initialize(_Start_Weapons: Array):
 
 	Current_Weapon = Weapon_List[Weapon_Stack[0]] # set the first weapon in the stack to current
 	emit_signal("Update_Weapon_Stack", Weapon_Stack)
-	_enter()
+	_enter.rpc()
 
+@rpc("call_local")
 func _enter():
 	Animation_Player.queue(Current_Weapon.Activate_Anim)
 	emit_signal("Weapon_Changed", Current_Weapon.Weapon_Name)
 	emit_signal("Update_Ammo", [Current_Weapon.Current_Ammo, Current_Weapon.Reserve_Ammo])
 
+#@rpc("call_local")
 func _exit(_next_weapon : String):
 	if _next_weapon != Current_Weapon.Weapon_Name:
 		if Animation_Player.get_current_animation() != Current_Weapon.Deactivate_Anim:
@@ -63,16 +66,16 @@ func Change_Weapon(weapon_name:String):
 	if Weapon_Index != -1:
 		Current_Weapon=Weapon_List[weapon_name]
 		Next_Weapon=''
-		_enter()
+		_enter.rpc()
 
 func _on_animation_guns_animation_finished(anim_name):
 	if anim_name == Current_Weapon.Deactivate_Anim:
 		Change_Weapon(Next_Weapon)
 	if anim_name == Current_Weapon.Shoot_Anim && Current_Weapon.Auto_Fire==true:
 		if Input.is_action_pressed("Shoot"):
-			shoot()
+			shoot.rpc()
 
-#@rpc("call_local")
+@rpc("call_local")
 func shoot():
 	if Current_Weapon.Current_Ammo != 0:
 		if !Animation_Player.is_playing():
@@ -88,7 +91,7 @@ func shoot():
 				PROJECTILE:
 					pass
 
-#@rpc("call_local")
+@rpc("call_local")
 func reload():
 	if Current_Weapon.Current_Ammo ==Current_Weapon.Magazine:
 		return
