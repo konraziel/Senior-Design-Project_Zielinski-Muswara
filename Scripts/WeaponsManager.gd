@@ -22,6 +22,8 @@ enum {NULL, HITSCAN, PROJECTILE}
 func _ready():
 	Initialize(Start_Weapons)
 func _input(event):
+	if not is_multiplayer_authority(): return
+	
 	if event.is_action_pressed('Weapon_UP'):
 		Weapon_Indicator = min(Weapon_Indicator+1,Weapon_Stack.size()-1)
 		_exit(Weapon_Stack[Weapon_Indicator])
@@ -31,7 +33,9 @@ func _input(event):
 	if event.is_action_pressed('Shoot'):
 		shoot()
 	if event.is_action_pressed('Reload'):
-		reload()	
+		reload()
+
+#@rpc("call_local")
 func Initialize(_Start_Weapons: Array):
 	for weapon in _weapon_resources:
 		Weapon_List[weapon.Weapon_Name]= weapon
@@ -53,13 +57,13 @@ func _exit(_next_weapon : String):
 			Animation_Player.play(Current_Weapon.Deactivate_Anim)
 			Next_Weapon=_next_weapon
 
+#@rpc("call_local")
 func Change_Weapon(weapon_name:String):
 	var Weapon_Index = Weapon_Stack.find(weapon_name)
 	if Weapon_Index != -1:
 		Current_Weapon=Weapon_List[weapon_name]
 		Next_Weapon=''
 		_enter()
-
 
 func _on_animation_guns_animation_finished(anim_name):
 	if anim_name == Current_Weapon.Deactivate_Anim:
@@ -68,6 +72,7 @@ func _on_animation_guns_animation_finished(anim_name):
 		if Input.is_action_pressed("Shoot"):
 			shoot()
 
+#@rpc("call_local")
 func shoot():
 	if Current_Weapon.Current_Ammo != 0:
 		if !Animation_Player.is_playing():
@@ -82,8 +87,8 @@ func shoot():
 					Hit_Scan_Collision(Camera_Collision)
 				PROJECTILE:
 					pass
-		else:
-			reload()
+
+#@rpc("call_local")
 func reload():
 	if Current_Weapon.Current_Ammo ==Current_Weapon.Magazine:
 		return
