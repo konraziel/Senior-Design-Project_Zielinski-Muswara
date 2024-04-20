@@ -9,10 +9,10 @@ const LERP_VAL = .1
 var anim_movement = Vector3.ZERO
 var jump_strength = 4.5
 
-@onready var camera = $Armature/PlayerHead/Camera3D
-@onready var interaction = $Armature/PlayerHead/Camera3D/interaction
-@onready var hand = $Armature/PlayerHead/Camera3D/hand
-@onready var anim_tree = $AnimationTree
+@onready var camera = $PlayerHead/Camera3D
+@onready var interaction = $PlayerHead/Camera3D/interaction
+@onready var hand = $PlayerHead/Camera3D/hand
+#@onready var anim_tree = $AnimationTree
 
 var picked_object
 var mouse_capture = true
@@ -50,7 +50,7 @@ func _unhandled_input(event):
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		rotate_y(-event.relative.x * mouse_sensitivity)
 		camera.rotate_x(-event.relative.y * mouse_sensitivity)
-		$Armature.rotation.y = wrapf($Armature.rotation.y, deg_to_rad(0), deg_to_rad(360))
+		$".".rotation.y = wrapf($".".rotation.y, deg_to_rad(0), deg_to_rad(360))
 		camera.rotation.x = clamp(camera.rotation.x, -1.2, 1.2)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -92,16 +92,16 @@ func _physics_process(delta):
 	
 	#var basis_inverse = armature_direction.inverse()
 	#normal_init_input = basis_inverse * direction
-	var anim_vector = transform.basis.inverse() * velocity / speed
-	anim_movement.x = anim_vector.x
-	anim_movement.z = anim_vector.z
-	var anim_movement_set = Vector2(anim_movement.x, -anim_movement.z)
-	anim_tree.set("parameters/BlendSpace2D/blend_position", anim_movement_set)
+	
+	# Animation stuff, maybe use later
+	#var anim_vector = transform.basis.inverse() * velocity / speed
+	#anim_movement.x = anim_vector.x
+	#anim_movement.z = anim_vector.z
+	#var anim_movement_set = Vector2(anim_movement.x, -anim_movement.z)
+	#anim_tree.set("parameters/BlendSpace2D/blend_position", anim_movement_set)
+	
 	#Global.debug.add_property("animation vector", anim_movement, 4)
 	
-	# TODOConverter3To4 looks that snap in Godot 4 is float, not vector like in Godot 3 - previous value `snap_vector`
-	#set_up_direction(Vector3.UP)
-	#set_floor_stop_on_slope_enabled(true)
 	move_and_slide()
 	
 	#for i in get_slide_collision_count():
