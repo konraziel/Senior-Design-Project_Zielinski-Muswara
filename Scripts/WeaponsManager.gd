@@ -77,36 +77,38 @@ func _on_animation_guns_animation_finished(anim_name):
 
 @rpc("call_local")
 func shoot():
-	if Current_Weapon.Current_Ammo != 0:
-		if !Animation_Player.is_playing():
-			Animation_Player.play(Current_Weapon.Shoot_Anim)
-			Current_Weapon.Current_Ammo -= 1
-			emit_signal("Update_Ammo", [Current_Weapon.Current_Ammo, Current_Weapon.Reserve_Ammo])
-			var Camera_Collision = Get_Camera_Collision()
-			match Current_Weapon.Type:
-				NULL:
-					print("Weapon Tpye Not Chosen")
-				HITSCAN:
-					Hit_Scan_Collision(Camera_Collision)
-				PROJECTILE:
-					pass
+	if is_multiplayer_authority(): 
+		if Current_Weapon.Current_Ammo != 0:
+			if !Animation_Player.is_playing():
+				Animation_Player.play(Current_Weapon.Shoot_Anim)
+				Current_Weapon.Current_Ammo -= 1
+				emit_signal("Update_Ammo", [Current_Weapon.Current_Ammo, Current_Weapon.Reserve_Ammo])
+				var Camera_Collision = Get_Camera_Collision()
+				match Current_Weapon.Type:
+					NULL:
+						print("Weapon Tpye Not Chosen")
+					HITSCAN:
+						Hit_Scan_Collision(Camera_Collision)
+					PROJECTILE:
+						pass
 
 @rpc("call_local")
 func reload():
-	if Current_Weapon.Current_Ammo ==Current_Weapon.Magazine:
-		return
-	elif !Animation_Player.is_playing():
-		if Current_Weapon.Reserve_Ammo!= 0:
-			Animation_Player.play(Current_Weapon.Reload_Anim)
-			var Reload_Amount =min(Current_Weapon.Magazine - Current_Weapon.Current_Ammo, Current_Weapon.Magazine, Current_Weapon.Reserve_Ammo)
-			
-			Current_Weapon.Current_Ammo = Current_Weapon.Current_Ammo +Reload_Amount
-			Current_Weapon.Reserve_Ammo = Current_Weapon.Reserve_Ammo - Reload_Amount
-			emit_signal("Update_Ammo", [Current_Weapon.Current_Ammo, Current_Weapon.Reserve_Ammo])
-		else:
-			Animation_Player.play(Current_Weapon.Out_Of_Ammo_Anim) 
-			
-	Animation_Player.play(Current_Weapon.Reload_Anim)
+	if is_multiplayer_authority(): 
+		if Current_Weapon.Current_Ammo ==Current_Weapon.Magazine:
+			return
+		elif !Animation_Player.is_playing():
+			if Current_Weapon.Reserve_Ammo!= 0:
+				Animation_Player.play(Current_Weapon.Reload_Anim)
+				var Reload_Amount =min(Current_Weapon.Magazine - Current_Weapon.Current_Ammo, Current_Weapon.Magazine, Current_Weapon.Reserve_Ammo)
+				
+				Current_Weapon.Current_Ammo = Current_Weapon.Current_Ammo +Reload_Amount
+				Current_Weapon.Reserve_Ammo = Current_Weapon.Reserve_Ammo - Reload_Amount
+				emit_signal("Update_Ammo", [Current_Weapon.Current_Ammo, Current_Weapon.Reserve_Ammo])
+			else:
+				Animation_Player.play(Current_Weapon.Out_Of_Ammo_Anim) 
+				
+		Animation_Player.play(Current_Weapon.Reload_Anim)
 
 func Get_Camera_Collision()->Vector3:
 	var camera= get_viewport().get_camera_3d()
@@ -120,7 +122,7 @@ func Get_Camera_Collision()->Vector3:
 		var Col_Point=Intersection.position
 		return Col_Point
 	else:
-			return Ray_End
+		return Ray_End
 			
 
 
