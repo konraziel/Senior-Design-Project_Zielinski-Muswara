@@ -1,5 +1,7 @@
 # Previous Multiplayer script, will revisit later
 extends Node
+# Define a signal with a parameter for the player's ID
+signal player_joined(peer_id)
 
 @onready var main_menu = $CanvasLayer/MainMenu
 @onready var address_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/AddressEntry
@@ -42,6 +44,8 @@ var address = "127.0.0.1"
 ## Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 	#pass
+	
+
 
 func _on_host_button_pressed():
 	main_menu.hide()
@@ -63,3 +67,6 @@ func add_player(peer_id):
 	player.name = str(peer_id)
 	print(player.name)
 	add_child(player)
+	
+	# Emit the signal with the player's ID
+	emit_signal("player_joined", peer_id)

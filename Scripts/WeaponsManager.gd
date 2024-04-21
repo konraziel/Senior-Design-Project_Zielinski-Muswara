@@ -4,6 +4,9 @@ signal Weapon_Changed
 signal Update_Ammo
 signal Update_Weapon_Stack
 
+#
+var player_weapons_dict={}
+
 @onready var Animation_Player = $FPS_Rig/AnimationGuns
 var Current_Weapon = null
 var Weapon_Stack = [] # An Array of Weapons Currently Held by the Player
@@ -14,14 +17,31 @@ var Next_Weapon : String
 var Weapon_List = {}
 
 @export var _weapon_resources: Array[Weapon_Resource]
-@export var Start_Weapons: Array[String]
+@export var Start_Weapons: Array[String] #will need to set diff per player choice
 @onready var Bullet_Point = $FPS_Rig/Bullet_Point
 
 enum {NULL, HITSCAN, PROJECTILE}
 
+	
 func _ready():
+	
+	
+	if not is_multiplayer_authority(): return
 	Initialize(Start_Weapons)
+	
+	# Obtain a reference to the source scene (where the signal is emitted)
+	# Obtain a reference to the main scene's multiplayer node
+	var main_scene = get_tree().root.get_node("World")
+	var multiplayer_node = main_scene.get_node("Multiplayer")
+	var callable = Callable(self, "_on_player_joined")
+	# Connect the signal to the function in this scene
+	multiplayer_node.connect("player_joined", callable)
+
+	
+
+	
 func _input(event):
+	if not is_multiplayer_authority(): return
 	if event.is_action_pressed('Weapon_UP'):
 		Weapon_Indicator = min(Weapon_Indicator+1,Weapon_Stack.size()-1)
 		_exit(Weapon_Stack[Weapon_Indicator])
@@ -129,3 +149,10 @@ func Hit_Scan_Damage(Collider):
 	if Collider.is_in_group("Target") and Collider.has_method("Hit_Success"):
 		Collider.Hit_Success(Current_Weapon.Damage)
 
+#######################################################
+# Define the function that will handle the signal
+#func _on_player_joined(peer_id):
+	## Handle the player's ID
+	#print("A new player joined with ID:", peer_id)
+	#player_weapons_dict[peer_id]=1
+	## Add your custom logic here to handle the player's ID

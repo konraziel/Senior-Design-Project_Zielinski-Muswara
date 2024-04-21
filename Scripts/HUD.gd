@@ -1,4 +1,5 @@
 extends CanvasLayer
+
 @onready var CurrentWeaponLabel: Label = $"VBoxContainer/HBoxContainer/CurrentWeapon"
 @onready var CurrentAmmoLabel : Label = $"VBoxContainer/HBoxContainer2/CurrentAmmo"
 @onready var CurrentWeaponStack : Label = $VBoxContainer/HBoxContainer3/WeaponStack
