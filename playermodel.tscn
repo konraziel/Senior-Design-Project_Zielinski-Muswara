@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://8kfpe6od13cl"]
+[gd_scene load_steps=21 format=3 uid="uid://ctjqgqtbtioll"]
 
 [ext_resource type="Script" path="res://Scripts/playermodel.gd" id="1_k5emc"]
 [ext_resource type="PackedScene" uid="uid://c1q625ijn10vr" path="res://models/rifle.glb" id="2_disx4"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://Scripts/DebugPanel.gd" id="3_pjivu"]
 [ext_resource type="Resource" uid="uid://c5jg8samrhnvw" path="res://WeaponResources/submachinegun.tres" id="4_1osql"]
 [ext_resource type="PackedScene" uid="uid://cwhjrsrqc2qy6" path="res://models/submachinegun.glb" id="5_l1phk"]
+[ext_resource type="Script" path="res://Scripts/HUD.gd" id="12_hf8j0"]
 
 [sub_resource type="Animation" id="Animation_b5i4n"]
 length = 0.25
@@ -375,6 +376,43 @@ properties/2/replication_mode = 1
 collision_layer = 2
 script = ExtResource("1_k5emc")
 
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+script = ExtResource("12_hf8j0")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Current Weapon: "
+
+[node name="Current Weapon" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Current Ammo: "
+
+[node name="Current Ammo" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Weapon Stack: "
+
+[node name="Weapon Stack" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+
 [node name="PlayerHead" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.79454, -0.0249233)
 
@@ -439,5 +477,7 @@ layout_mode = 2
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_jwjd1")
 
-[connection signal="Update_Weapon_Stack" from="PlayerHead/Camera3D/WeaponsManager" to="." method="_on_weapons_manager_update_weapon_stack"]
+[connection signal="Update_Ammo" from="PlayerHead/Camera3D/WeaponsManager" to="CanvasLayer" method="_on_weapons_manager_update_ammo"]
+[connection signal="Update_Weapon_Stack" from="PlayerHead/Camera3D/WeaponsManager" to="CanvasLayer" method="_on_weapons_manager_update_weapon_stack"]
+[connection signal="Weapon_Changed" from="PlayerHead/Camera3D/WeaponsManager" to="CanvasLayer" method="_on_weapons_manager_weapon_changed"]
 [connection signal="animation_finished" from="PlayerHead/Camera3D/WeaponsManager/FPS_Rig/AnimationGuns" to="PlayerHead/Camera3D/WeaponsManager" method="_on_animation_guns_animation_finished"]
