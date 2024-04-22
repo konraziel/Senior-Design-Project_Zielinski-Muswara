@@ -481,3 +481,4 @@ replication_config = SubResource("SceneReplicationConfig_jwjd1")
 [connection signal="Update_Weapon_Stack" from="PlayerHead/Camera3D/WeaponsManager" to="CanvasLayer" method="_on_weapons_manager_update_weapon_stack"]
 [connection signal="Weapon_Changed" from="PlayerHead/Camera3D/WeaponsManager" to="CanvasLayer" method="_on_weapons_manager_weapon_changed"]
 [connection signal="animation_finished" from="PlayerHead/Camera3D/WeaponsManager/FPS_Rig/AnimationGuns" to="PlayerHead/Camera3D/WeaponsManager" method="_on_animation_guns_animation_finished"]
+[connection signal="animation_started" from="PlayerHead/Camera3D/WeaponsManager/FPS_Rig/AnimationGuns" to="PlayerHead/Camera3D/WeaponsManager" method="_on_animation_guns_animation_started"]

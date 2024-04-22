@@ -27,15 +27,17 @@ func _input(event):
 	
 		if event.is_action_pressed('Weapon_UP'):
 			Weapon_Indicator = min(Weapon_Indicator+1,Weapon_Stack.size()-1)
-			_exit(Weapon_Stack[Weapon_Indicator])
+			_exit.rpc(Weapon_Stack[Weapon_Indicator])
 		if event.is_action_pressed('Weapon_DOWN'):
 			Weapon_Indicator = max(Weapon_Indicator-1,0)
-			_exit(Weapon_Stack[Weapon_Indicator])
+			_exit.rpc(Weapon_Stack[Weapon_Indicator])
 		if event.is_action_pressed('Shoot'):
 			shoot.rpc()
 		if event.is_action_pressed('Reload'):
 			reload.rpc()
 
+# Strange jank with activation anim running multiple times when you switch weapons
+# Also if you change weapons to smg before a player joins, and then the client joins, the client sees the rifle, even though the smg is selected
 #@rpc("call_local")
 func Initialize(_Start_Weapons: Array):
 	for weapon in _weapon_resources:
@@ -53,14 +55,14 @@ func _enter():
 	emit_signal("Weapon_Changed", Current_Weapon.Weapon_Name)
 	emit_signal("Update_Ammo", [Current_Weapon.Current_Ammo, Current_Weapon.Reserve_Ammo])
 
-#@rpc("call_local")
+@rpc("call_local")
 func _exit(_next_weapon : String):
 	if _next_weapon != Current_Weapon.Weapon_Name:
 		if Animation_Player.get_current_animation() != Current_Weapon.Deactivate_Anim:
 			Animation_Player.play(Current_Weapon.Deactivate_Anim)
 			Next_Weapon=_next_weapon
 
-#@rpc("call_local")
+@rpc("call_local")
 func Change_Weapon(weapon_name:String):
 	var Weapon_Index = Weapon_Stack.find(weapon_name)
 	if Weapon_Index != -1:
@@ -70,47 +72,55 @@ func Change_Weapon(weapon_name:String):
 
 func _on_animation_guns_animation_finished(anim_name):
 	if anim_name == Current_Weapon.Deactivate_Anim:
-		Change_Weapon(Next_Weapon)
+		Change_Weapon.rpc(Next_Weapon)
 	if anim_name == Current_Weapon.Shoot_Anim && Current_Weapon.Auto_Fire==true:
 		if Input.is_action_pressed("Shoot"):
 			shoot.rpc()
 
+func _on_animation_guns_animation_started(anim_name):
+	playAnimRemotely.rpc(anim_name)
+
+@rpc("call_remote")
+func playAnimRemotely(anim_name):
+	if anim_name == Current_Weapon.Shoot_Anim:
+		Animation_Player.play(Current_Weapon.Shoot_Anim)
+	elif anim_name == Current_Weapon.Reload_Anim:
+		Animation_Player.play(Current_Weapon.Reload_Anim)
+
 @rpc("call_local")
 func shoot():
-	#if not is_multiplayer_authority(): return
-	if Current_Weapon.Current_Ammo != 0:
-		if !Animation_Player.is_playing():
-			Animation_Player.play(Current_Weapon.Shoot_Anim)
-			if is_multiplayer_authority():
+	if is_multiplayer_authority():
+		if Current_Weapon.Current_Ammo != 0:
+			if !Animation_Player.is_playing():
+				Animation_Player.play(Current_Weapon.Shoot_Anim)
 				Current_Weapon.Current_Ammo -= 1
 				emit_signal("Update_Ammo", [Current_Weapon.Current_Ammo, Current_Weapon.Reserve_Ammo])
-			var Camera_Collision = Get_Camera_Collision()
-			match Current_Weapon.Type:
-				NULL:
-					print("Weapon Tpye Not Chosen")
-				HITSCAN:
-					Hit_Scan_Collision(Camera_Collision)
-				PROJECTILE:
-					pass
+				var Camera_Collision = Get_Camera_Collision()
+				match Current_Weapon.Type:
+					NULL:
+						print("Weapon Tpye Not Chosen")
+					HITSCAN:
+						Hit_Scan_Collision(Camera_Collision)
+					PROJECTILE:
+						pass
 
 @rpc("call_local")
 func reload():
-	#if not is_multiplayer_authority(): return
-	if Current_Weapon.Current_Ammo ==Current_Weapon.Magazine:
-		return
-	elif !Animation_Player.is_playing():
-		if Current_Weapon.Reserve_Ammo!= 0:
-			Animation_Player.play(Current_Weapon.Reload_Anim)
-			if is_multiplayer_authority():
+	if is_multiplayer_authority():
+		if Current_Weapon.Current_Ammo ==Current_Weapon.Magazine:
+			return
+		elif !Animation_Player.is_playing():
+			if Current_Weapon.Reserve_Ammo!= 0:
+				Animation_Player.play(Current_Weapon.Reload_Anim)
 				var Reload_Amount =min(Current_Weapon.Magazine - Current_Weapon.Current_Ammo, Current_Weapon.Magazine, Current_Weapon.Reserve_Ammo)
 			
 				Current_Weapon.Current_Ammo = Current_Weapon.Current_Ammo +Reload_Amount
 				Current_Weapon.Reserve_Ammo = Current_Weapon.Reserve_Ammo - Reload_Amount
 				emit_signal("Update_Ammo", [Current_Weapon.Current_Ammo, Current_Weapon.Reserve_Ammo])
-		else:
-			Animation_Player.play(Current_Weapon.Out_Of_Ammo_Anim) 
-			
-	Animation_Player.play(Current_Weapon.Reload_Anim)
+			else:
+				Animation_Player.play(Current_Weapon.Out_Of_Ammo_Anim) 
+				
+		Animation_Player.play(Current_Weapon.Reload_Anim)
 
 func Get_Camera_Collision()->Vector3:
 	var camera= get_viewport().get_camera_3d()
@@ -128,7 +138,7 @@ func Get_Camera_Collision()->Vector3:
 
 
 func Hit_Scan_Collision(Collision_Point):
-	if not is_multiplayer_authority(): return
+	#if not is_multiplayer_authority(): return
 	var Bullet_Direction = (Collision_Point - Bullet_Point.get_global_transform().origin).normalized()
 	var New_Interaction = PhysicsRayQueryParameters3D.create(Bullet_Point.get_global_transform().origin, Collision_Point+Bullet_Direction*2)
 	var Bullet_Collision = get_world_3d().direct_space_state.intersect_ray(New_Interaction)
@@ -140,4 +150,3 @@ func Hit_Scan_Collision(Collision_Point):
 func Hit_Scan_Damage(Collider):
 	if Collider.is_in_group("Target") and Collider.has_method("Hit_Success"):
 		Collider.Hit_Success(Current_Weapon.Damage)
-
