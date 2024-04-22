@@ -23,18 +23,18 @@ func _ready():
 	Initialize(Start_Weapons)
 
 func _input(event):
-	if not is_multiplayer_authority(): return
+	if is_multiplayer_authority():
 	
-	if event.is_action_pressed('Weapon_UP'):
-		Weapon_Indicator = min(Weapon_Indicator+1,Weapon_Stack.size()-1)
-		_exit(Weapon_Stack[Weapon_Indicator])
-	if event.is_action_pressed('Weapon_DOWN'):
-		Weapon_Indicator = max(Weapon_Indicator-1,0)
-		_exit(Weapon_Stack[Weapon_Indicator])
-	if event.is_action_pressed('Shoot'):
-		shoot.rpc()
-	if event.is_action_pressed('Reload'):
-		reload.rpc()
+		if event.is_action_pressed('Weapon_UP'):
+			Weapon_Indicator = min(Weapon_Indicator+1,Weapon_Stack.size()-1)
+			_exit(Weapon_Stack[Weapon_Indicator])
+		if event.is_action_pressed('Weapon_DOWN'):
+			Weapon_Indicator = max(Weapon_Indicator-1,0)
+			_exit(Weapon_Stack[Weapon_Indicator])
+		if event.is_action_pressed('Shoot'):
+			shoot.rpc()
+		if event.is_action_pressed('Reload'):
+			reload.rpc()
 
 #@rpc("call_local")
 func Initialize(_Start_Weapons: Array):
@@ -77,38 +77,38 @@ func _on_animation_guns_animation_finished(anim_name):
 
 @rpc("call_local")
 func shoot():
-	if is_multiplayer_authority(): 
-		if Current_Weapon.Current_Ammo != 0:
-			if !Animation_Player.is_playing():
-				Animation_Player.play(Current_Weapon.Shoot_Anim)
-				Current_Weapon.Current_Ammo -= 1
-				emit_signal("Update_Ammo", [Current_Weapon.Current_Ammo, Current_Weapon.Reserve_Ammo])
-				var Camera_Collision = Get_Camera_Collision()
-				match Current_Weapon.Type:
-					NULL:
-						print("Weapon Tpye Not Chosen")
-					HITSCAN:
-						Hit_Scan_Collision(Camera_Collision)
-					PROJECTILE:
-						pass
+	if not is_multiplayer_authority(): return
+	if Current_Weapon.Current_Ammo != 0:
+		if !Animation_Player.is_playing():
+			Animation_Player.play(Current_Weapon.Shoot_Anim)
+			Current_Weapon.Current_Ammo -= 1
+			emit_signal("Update_Ammo", [Current_Weapon.Current_Ammo, Current_Weapon.Reserve_Ammo])
+			var Camera_Collision = Get_Camera_Collision()
+			match Current_Weapon.Type:
+				NULL:
+					print("Weapon Tpye Not Chosen")
+				HITSCAN:
+					Hit_Scan_Collision(Camera_Collision)
+				PROJECTILE:
+					pass
 
 @rpc("call_local")
 func reload():
-	if is_multiplayer_authority(): 
-		if Current_Weapon.Current_Ammo ==Current_Weapon.Magazine:
-			return
-		elif !Animation_Player.is_playing():
-			if Current_Weapon.Reserve_Ammo!= 0:
-				Animation_Player.play(Current_Weapon.Reload_Anim)
-				var Reload_Amount =min(Current_Weapon.Magazine - Current_Weapon.Current_Ammo, Current_Weapon.Magazine, Current_Weapon.Reserve_Ammo)
-				
-				Current_Weapon.Current_Ammo = Current_Weapon.Current_Ammo +Reload_Amount
-				Current_Weapon.Reserve_Ammo = Current_Weapon.Reserve_Ammo - Reload_Amount
-				emit_signal("Update_Ammo", [Current_Weapon.Current_Ammo, Current_Weapon.Reserve_Ammo])
-			else:
-				Animation_Player.play(Current_Weapon.Out_Of_Ammo_Anim) 
-				
-		Animation_Player.play(Current_Weapon.Reload_Anim)
+	#if not is_multiplayer_authority(): return
+	if Current_Weapon.Current_Ammo ==Current_Weapon.Magazine:
+		return
+	elif !Animation_Player.is_playing():
+		if Current_Weapon.Reserve_Ammo!= 0:
+			Animation_Player.play(Current_Weapon.Reload_Anim)
+			var Reload_Amount =min(Current_Weapon.Magazine - Current_Weapon.Current_Ammo, Current_Weapon.Magazine, Current_Weapon.Reserve_Ammo)
+			
+			Current_Weapon.Current_Ammo = Current_Weapon.Current_Ammo +Reload_Amount
+			Current_Weapon.Reserve_Ammo = Current_Weapon.Reserve_Ammo - Reload_Amount
+			emit_signal("Update_Ammo", [Current_Weapon.Current_Ammo, Current_Weapon.Reserve_Ammo])
+		else:
+			Animation_Player.play(Current_Weapon.Out_Of_Ammo_Anim) 
+			
+	Animation_Player.play(Current_Weapon.Reload_Anim)
 
 func Get_Camera_Collision()->Vector3:
 	var camera= get_viewport().get_camera_3d()
@@ -123,10 +123,10 @@ func Get_Camera_Collision()->Vector3:
 		return Col_Point
 	else:
 		return Ray_End
-			
 
 
 func Hit_Scan_Collision(Collision_Point):
+	if not is_multiplayer_authority(): return
 	var Bullet_Direction = (Collision_Point - Bullet_Point.get_global_transform().origin).normalized()
 	var New_Interaction = PhysicsRayQueryParameters3D.create(Bullet_Point.get_global_transform().origin, Collision_Point+Bullet_Direction*2)
 	var Bullet_Collision = get_world_3d().direct_space_state.intersect_ray(New_Interaction)
