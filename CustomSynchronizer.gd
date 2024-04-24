@@ -15,16 +15,20 @@ func find_parent_node_by_name(node_name: String) -> Node:
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	if not is_multiplayer_authority(): return
 	#pass # Replace with function body.
 	var world_node = find_parent_node_by_name("World")
 	if(world_node == null):
 		print("ye")
 	else:
 		print("no")
+		
 	var enet_peer=world_node.enet_peer
-
 	var enet_connection_host=enet_peer.host
 	var peers= enet_connection_host.get_peers()
+	
+	if multiplayer.is_server():
+		print("host")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):

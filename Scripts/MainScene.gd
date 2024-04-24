@@ -10,6 +10,7 @@ var enet_peer = ENetMultiplayerPeer.new()
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	#remove_child($player) # use this to disable an avatar you are not using
+	#set_process(!is_processing())
 	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -19,7 +20,7 @@ func _process(_delta):
 func _on_host_button_pressed():
 	main_menu.hide()
 	
-	enet_peer.create_server(PORT)
+	enet_peer.create_server(PORT, 2)
 	multiplayer.multiplayer_peer = enet_peer
 	multiplayer.peer_connected.connect(add_player)
 	multiplayer.peer_disconnected.disconnect(delete_player)
@@ -46,6 +47,7 @@ func delete_player(peer_id):
 	if not $Players.has_node(str(peer_id)):
 		return
 	$Players.get_node(str(peer_id)).queue_free()
+
 
 #func _exit_tree():
 	#if not multiplayer.is_server():
