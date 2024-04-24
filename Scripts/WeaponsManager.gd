@@ -20,7 +20,7 @@ var Weapon_List = {}
 enum {NULL, HITSCAN, PROJECTILE}
 
 func _ready():
-	Initialize(Start_Weapons)
+	Initialize.rpc(Start_Weapons)
 
 func _input(event):
 	if is_multiplayer_authority():
@@ -38,7 +38,7 @@ func _input(event):
 
 # Strange jank with activation anim running multiple times when you switch weapons
 # Also if you change weapons to smg before a player joins, and then the client joins, the client sees the rifle, even though the smg is selected
-#@rpc("call_local")
+@rpc("call_local")
 func Initialize(_Start_Weapons: Array):
 	for weapon in _weapon_resources:
 		Weapon_List[weapon.Weapon_Name]= weapon
@@ -51,7 +51,8 @@ func Initialize(_Start_Weapons: Array):
 
 @rpc("call_local")
 func _enter():
-	Animation_Player.queue(Current_Weapon.Activate_Anim)
+	#print(str(get_multiplayer_authority()))
+	Animation_Player.play(Current_Weapon.Activate_Anim)
 	emit_signal("Weapon_Changed", Current_Weapon.Weapon_Name)
 	emit_signal("Update_Ammo", [Current_Weapon.Current_Ammo, Current_Weapon.Reserve_Ammo])
 

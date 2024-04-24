@@ -22,6 +22,7 @@ func _on_host_button_pressed():
 	enet_peer.create_server(PORT)
 	multiplayer.multiplayer_peer = enet_peer
 	multiplayer.peer_connected.connect(add_player)
+	multiplayer.peer_disconnected.disconnect(delete_player)
 	
 	add_player(multiplayer.get_unique_id())
 
@@ -32,6 +33,22 @@ func _on_join_button_pressed():
 	multiplayer.multiplayer_peer = enet_peer
 
 func add_player(peer_id):
+	print("connecting: " + str(peer_id))
+	
 	var player = Player.instantiate()
 	player.name = str(peer_id)
-	add_child(player)
+	
+	$Players.add_child(player)
+	
+func delete_player(peer_id):
+	print("disconnecting: " + str(peer_id))
+	
+	if not $Players.has_node(str(peer_id)):
+		return
+	$Players.get_node(str(peer_id)).queue_free()
+
+#func _exit_tree():
+	#if not multiplayer.is_server():
+		#return
+	#multiplayer.peer_connected.disconnect(add_player)
+	#multiplayer.peer_disconnected.disconnect(delete_player)
