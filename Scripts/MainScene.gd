@@ -6,7 +6,7 @@ extends Node3D
 const Player = preload("res://playermodel.tscn")
 const PORT = 9999
 var enet_peer = ENetMultiplayerPeer.new()
-
+var peer_ID:int
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	#remove_child($player) # use this to disable an avatar you are not using
@@ -35,10 +35,9 @@ func _on_join_button_pressed():
 
 func add_player(peer_id):
 	print("connecting: " + str(peer_id))
-	
 	var player = Player.instantiate()
 	player.name = str(peer_id)
-	
+	#peer_ID=get_tree().get_unique_id()
 	$Players.add_child(player)
 	
 func delete_player(peer_id):
