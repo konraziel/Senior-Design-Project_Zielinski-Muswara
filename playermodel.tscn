@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://dsryycglkb1cj"]
+[gd_scene load_steps=22 format=3 uid="uid://dsryycglkb1cj"]
 
 [ext_resource type="Script" path="res://Scripts/playermodel.gd" id="1_k5emc"]
 [ext_resource type="PackedScene" uid="uid://c1q625ijn10vr" path="res://models/rifle.glb" id="2_disx4"]
@@ -362,6 +362,17 @@ radius = 0.35
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ii1gq"]
 radius = 0.35
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_jwjd1"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = false
+properties/0/replication_mode = 0
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = false
+properties/1/replication_mode = 0
+properties/2/path = NodePath("PlayerHead/Camera3D:rotation")
+properties/2/spawn = false
+properties/2/replication_mode = 0
+
 [node name="playermodel" type="CharacterBody3D"]
 collision_layer = 2
 script = ExtResource("1_k5emc")
@@ -465,6 +476,7 @@ offset_bottom = 40.0
 layout_mode = 2
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_jwjd1")
 
 [node name="CustomSynchronizer" type="Node" parent="."]
 script = ExtResource("10_l11ss")
