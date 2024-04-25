@@ -5,6 +5,8 @@ var world_node:Node3D
 var current_peer:ENetPacketPeer
 var peers:Array 
 
+var debug: Array
+
 func find_parent_node_by_name(node_name: String) -> Node:
 	
 	var current_node = self  #node (PlayerModel)
@@ -31,23 +33,31 @@ func _ready():
 	#else:
 		#print("no")
 	enet_peer=world_node.enet_peer
+	print(enet_peer)
 
 	var enet_connection_host=enet_peer.host
 	peers= enet_connection_host.get_peers()
-
+	
+	#print("Get unique id: ", multiplayer.get_unique_id())
 	if multiplayer.is_server():
 		print("server")
+	
+	#debug = playernode.send_array
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	if  is_multiplayer_authority(): return
-	var client_input=PackedByteArray(playernode.send_array)
+	if not is_multiplayer_authority(): return
+	if multiplayer.is_server(): return
+	#if playernode.send_array == debug: return
 	
-	#for i in peers:
-		#print(i)
-
-	#current_peer=enet_peer.get_peer(world_node.peerID)
-	##print("world_node: ",world_node.peer_ID)
-	##print("ENetMultiplayerPeer: ", enet_peer)
+	
+	#var client_input=PackedByteArray(playernode.send_array)
+	#current_peer=peers[0]
+	#current_peer.send(0, client_input, 1)
+	
+	#debug = playernode.send_array
+	
+	#print("world_node: ",world_node.peer_ID)
+	#print("ENetMultiplayerPeer: ", enet_peer)
 	#print(enet_peer.get_peer(world_node.peerID))
 	#if current_peer==null:
 		#print("yes")

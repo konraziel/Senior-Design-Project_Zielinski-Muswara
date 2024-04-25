@@ -64,9 +64,14 @@ func _physics_process(delta):
 		var input = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 		send_array = [input.x, input.y, Input.is_action_just_pressed("jump")]
 		
-
+		if Input.is_action_just_pressed("alt"):
+			if mouse_capture == false:
+				mouse_capture_true()
+			elif mouse_capture != false:
+				mouse_capture_false()
+		
 	else:
-	
+		
 		if Input.is_action_just_pressed("alt"):
 			if mouse_capture == false:
 				mouse_capture_true()

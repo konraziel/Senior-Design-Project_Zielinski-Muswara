@@ -12,10 +12,16 @@ var packets_data: Array
 # Debugging variables
 var number_of_peers: int
 var peer_ID:int
+var test: Array
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var number_of_peers = 0
+	
+	#while enet_peer.host.service().size() > 0:
+		#packets_data = enet_peer.host.service()
+		#print(packets_data)
+	
 	set_physics_process(!is_physics_processing())
 	set_process(!is_processing())
 
@@ -25,11 +31,16 @@ func _process(_delta):
 		number_of_peers = peers.size()
 		print("mainscene.gd: ", str(number_of_peers) + " peer(s) currently connected")
 	
+	#recieve_packets()
 	#for peer in peers:
 		#packets_data.append(peer.get_)
 
 func _physics_process(delta):
 	pass
+
+func recieve_packets():
+	packets_data = enet_peer.host.service()
+	print(packets_data)
 
 func _on_host_button_pressed():
 	main_menu.hide()
@@ -47,6 +58,7 @@ func _on_join_button_pressed():
 	main_menu.hide()
 	
 	enet_peer.create_client("localhost", PORT)
+	multiplayer.multiplayer_peer = null
 	multiplayer.multiplayer_peer = enet_peer
 
 func _on_players_child_entered_tree(node):
@@ -70,9 +82,3 @@ func delete_player(peer_id):
 	if not $Players.has_node(str(peer_id)):
 		return
 	$Players.get_node(str(peer_id)).queue_free()
-
-#func _exit_tree():
-	#if not multiplayer.is_server():
-		#return
-	#multiplayer.peer_connected.disconnect(add_player)
-	#multiplayer.peer_disconnected.disconnect(delete_player)
