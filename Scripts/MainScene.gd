@@ -2,83 +2,66 @@ extends Node3D
 
 @onready var main_menu = $CanvasLayer/MainMenu
 @onready var address_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/AddressEntry
+var port = 4452  # You may change this port if needed
 
-const Player = preload("res://playermodel.tscn")
-const PORT = 9999
-var enet_peer = ENetMultiplayerPeer.new()
-var peers: Array
-var packets_data: Array
-
-# Debugging variables
-var number_of_peers: int
-var peer_ID:int
-var test: Array
-
+var enet_con = ENetConnection.new()
+var client_peer: ENetPacketPeer
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	var number_of_peers = 0
-	
-	#while enet_peer.host.service().size() > 0:
-		#packets_data = enet_peer.host.service()
-		#print(packets_data)
-	
-	set_physics_process(!is_physics_processing())
-	set_process(!is_processing())
+	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	if number_of_peers != peers.size():
-		number_of_peers = peers.size()
-		print("mainscene.gd: ", str(number_of_peers) + " peer(s) currently connected")
+	#print(address_entry.text)
+	#pass
 	
-	#recieve_packets()
-	#for peer in peers:
-		#packets_data.append(peer.get_)
-
+	print(enet_con.get_peers())
 func _physics_process(delta):
 	pass
 
-func recieve_packets():
-	packets_data = enet_peer.host.service()
-	print(packets_data)
+func receive_packets():
+	pass
+
 
 func _on_host_button_pressed():
 	main_menu.hide()
+		
+	var address = address_entry.text
+
 	
-	enet_peer.create_server(PORT, 2)
-	multiplayer.multiplayer_peer = enet_peer
-	multiplayer.peer_connected.connect(add_player)
-	multiplayer.peer_disconnected.connect(delete_player)
-	
-	set_physics_process(multiplayer.is_server())
-	set_process(multiplayer.is_server())
-	add_player(multiplayer.get_unique_id())
+	# Debug parameter values
+	print("Address:", address)
+	print("Port:", port)
+		
+	print("Attempting to create host on address: ", address, " and port: ", port)
+		
+	# Create the host bound to the given address and port
+	var error = enet_con.create_host_bound("127.0.0.1", port, 2,  2, 0)
+		
+	# Check for errors and provide feedback
+	if error == OK:
+		print("Host created successfully on address: ", address, " and port: ", port)
+	else:
+		print("Failed to create host. Error code: ", error)
+
+
 
 func _on_join_button_pressed():
 	main_menu.hide()
+	var address = "127.0.0.1"
 	
-	enet_peer.create_client("localhost", PORT)
-	multiplayer.multiplayer_peer = null
-	multiplayer.multiplayer_peer = enet_peer
-
-func _on_players_child_entered_tree(node):
-	#print("test")
-	if enet_peer.host.EVENT_CONNECT:
-		peers = enet_peer.host.get_peers()
-	else:
-		print_debug("mainscene.gd: EnetConnection Event is wrong!!")
-
-func add_player(peer_id):
-	print("mainscene.gd: connecting: " + str(peer_id))
 	
-	var player = Player.instantiate()
-	player.name = str(peer_id)
-	#peer_ID=get_tree().get_unique_id()
-	$Players.add_child(player)
-	
-func delete_player(peer_id):
-	print("mainscene.gd: disconnecting: " + str(peer_id))
-	
-	if not $Players.has_node(str(peer_id)):
+	print("Attempting to connect to host at address:", address, " and port:", 2548)
+	if enet_con==null:
 		return
-	$Players.get_node(str(peer_id)).queue_free()
+	# Attempt to connect to the host
+	#client_peer = enet_con.connect_to_host(address, 2548, 0, 0)
+	#
+	## Check the result of the connection attempt
+	#
+	#if client_peer == null:
+		#print("Failed to connect to host.")
+	#else:
+		#print("Successfully connected to host.")
+
+	
