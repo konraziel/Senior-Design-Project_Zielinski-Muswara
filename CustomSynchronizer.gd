@@ -6,6 +6,7 @@ var current_peer:ENetPacketPeer
 var peers:Array 
 
 var debug: Array
+var packedbyte_debug: PackedByteArray
 
 func find_parent_node_by_name(node_name: String) -> Node:
 	
@@ -32,29 +33,40 @@ func _ready():
 		#print("ye")
 	#else:
 		#print("no")
-	enet_peer=world_node.enet_peer
-	print(enet_peer)
-
-	var enet_connection_host=enet_peer.host
-	peers= enet_connection_host.get_peers()
+	enet_peer = world_node.enet_peer
+	print("CustomSynchronizer - ENet Peer: ", enet_peer)
+	
+	#var enet_connection_host=enet_peer.host
+	#peers= enet_connection_host.get_peers()
 	
 	#print("Get unique id: ", multiplayer.get_unique_id())
-	if multiplayer.is_server():
-		print("server")
+	#if multiplayer.is_server():
+		#print("CustomSynchronizer: server")
 	
 	#debug = playernode.send_array
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
+	
 	if not is_multiplayer_authority(): return
 	if multiplayer.is_server(): return
 	#if playernode.send_array == debug: return
 	
+	# My suspicion is that this is not how poll is supposed to be used, the packets are sent sometimes but it rarely works
+	enet_peer.poll()
+	#var testing_get_packet_peer = enet_peer.get_packet_peer()
+	#print("CustomSynchronizer - Get ENet Peer ID from Packet: ", testing_get_packet_peer)
 	
+	packedbyte_debug = enet_peer.get_packet()
+	if not packedbyte_debug.is_empty():
+		print("CustomSynchronizer - Recieved Packet: ", packedbyte_debug)
 	#var client_input=PackedByteArray(playernode.send_array)
 	#current_peer=peers[0]
 	#current_peer.send(0, client_input, 1)
 	
 	#debug = playernode.send_array
+	
+	
 	
 	#print("world_node: ",world_node.peer_ID)
 	#print("ENetMultiplayerPeer: ", enet_peer)
