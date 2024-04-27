@@ -3,9 +3,10 @@ var playernode:CharacterBody3D
 var enet_peer:ENetMultiplayerPeer
 var world_node:Node3D
 var current_peer:ENetPacketPeer
-var peers:Array 
+var local_peers:Array
 
 var debug: Array
+var packet_debug: PackedByteArray
 
 func find_parent_node_by_name(node_name: String) -> Node:
 	
@@ -25,34 +26,25 @@ func _ready():
 	
 	#playernode to get position
 	playernode=self.get_parent()
-	
-	#pass # Replace with function body.
 	world_node = find_parent_node_by_name("World")
-	#if(world_node == null):
-		#print("ye")
-	#else:
-		#print("no")
-	enet_peer=world_node.enet_peer
-	print(enet_peer)
-
-	var enet_connection_host=enet_peer.host
-	peers= enet_connection_host.get_peers()
+	
+	#enet_peer = world_node.enet_peer
+	#print("CustomSynchronizer - ENet Peer: ", enet_peer, " ID: ", multiplayer.get_unique_id())
+	#local_peers = world_node.peers
 	
 	#print("Get unique id: ", multiplayer.get_unique_id())
-	if multiplayer.is_server():
-		print("server")
+	#if multiplayer.is_server():
+		#print("CustomSynchronizer: server")
 	
 	#debug = playernode.send_array
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	if not is_multiplayer_authority(): return
 	if multiplayer.is_server(): return
-	#if playernode.send_array == debug: return
 	
-	
-	#var client_input=PackedByteArray(playernode.send_array)
-	#current_peer=peers[0]
-	#current_peer.send(0, client_input, 1)
+	#var testing_get_packet_peer = enet_peer.get_packet_peer()
+	#print("CustomSynchronizer - Get ENet Peer ID from Packet: ", testing_get_packet_peer)
 	
 	#debug = playernode.send_array
 	
@@ -64,5 +56,3 @@ func _process(_delta):
 	#else:
 		#print("no1")
 	#current_peer.send(0, client_input,1)
-	#
-	#
