@@ -1,5 +1,9 @@
 extends CharacterBody3D
 
+###########PEERS-INPUTS##############
+var peer_inputs:Dictionary
+##########################
+
 var input_vector:Vector3
 var speed = 4.0
 var gravity = 9.8
@@ -9,7 +13,7 @@ const LERP_VAL = .1
 var anim_movement = Vector3.ZERO
 var jump_strength = 4.5
 
-var send_array:Array
+var send_array=[0,0,false]
 
 @onready var camera = $PlayerHead/Camera3D
 @onready var interaction = $PlayerHead/Camera3D/interaction
@@ -57,13 +61,17 @@ func _unhandled_input(event):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
+	
 	if not is_multiplayer_authority(): return
 	
 	if not multiplayer.is_server():
-		#inputs to send
-		var input = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
-		send_array = [input.x, input.y, Input.is_action_just_pressed("jump")]
 		
+		var input = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+		#send_array = [input.x, input.y, Input.is_action_just_pressed("jump")]
+		rpc_id(1, "change_input", multiplayer.get_unique_id(),input.x, input.y, Input.is_action_just_pressed("jump"))
+		#inputs to send
+		
+		#
 		if Input.is_action_just_pressed("alt"):
 			if mouse_capture == false:
 				mouse_capture_true()
@@ -93,10 +101,13 @@ func _physics_process(delta):
 		# Input handling
 		var input = Input.get_vector("move_left", "move_right", "move_forward", "move_back")	
 		#var armature_direction = $Armature.transform.basis
-		var direction = (transform.basis * Vector3(input.x, 0, input.y)).normalized()
+		var direction = (transform.basis * Vector3(send_array[0], 0, send_array[1])).normalized()
 		
 		#Global.debug.add_property("x vector", input_vector.x, 1)
 		#Global.debug.add_property("z vector", input_vector.z, 2)
+		
+		velocity.x= lerp(velocity.x, direction.x * speed, LERP_VAL)
+		velocity.z= lerp(velocity.z, direction.z * speed, LERP_VAL)
 		
 		velocity.x= lerp(velocity.x, direction.x * speed, LERP_VAL)
 		velocity.z= lerp(velocity.z, direction.z * speed, LERP_VAL)
@@ -128,3 +139,7 @@ func _physics_process(delta):
 			var a = picked_object.global_transform.origin
 			var b = hand.global_transform.origin
 			picked_object.set_linear_velocity((b-a)*4)
+@rpc
+func change_input(id,x,y,jump):
+	peer_inputs[id]=[x,y,jump]
+	print(id, peer_inputs[id] )
