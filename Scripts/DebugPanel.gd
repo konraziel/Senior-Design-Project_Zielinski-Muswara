@@ -1,25 +1,32 @@
 extends Panel
 
-@export var current_state : State
+#@export var current_state : State
 @onready var property_container =$MarginContainer/VBoxContainer
 var property
 var fps:String
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	
 	Global.debug=self
 	visible=false
 	#add_debug_property("FPS", fps)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	if not is_multiplayer_authority(): return
+	
 	fps= "%.2f" % (1.0/delta)
 	add_property("FPS",fps, 1)
+
 func _input(event):
+	if not is_multiplayer_authority(): return
 	#toggle debug panel
 	if event.is_action_pressed("debug"):
 		visible=!visible
 
 func add_property(title: String, value, order):
+	if not is_multiplayer_authority(): return
+	
 	var target
 	target = property_container.find_child(title, true, false)  # Try to find Label node with same name
 	if !target:  # If there is no current Label node for property (i.e., initial load)

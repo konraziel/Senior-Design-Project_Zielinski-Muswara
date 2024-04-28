@@ -47,6 +47,8 @@ func _ready():
 	# -- The point of this is to make sure that the server and client can only control their corresponding player
 	if not is_multiplayer_authority(): return
 	
+	print("playermodel.gd: ", multiplayer.multiplayer_peer.get_unique_id())
+	
 	camera.current = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
