@@ -15,7 +15,6 @@ func Hit_Success(Damage):
 		queue_free()
 
 
-
 var input_vector:Vector3
 var speed = 4.0
 var gravity = 9.8
@@ -38,11 +37,11 @@ var picked_object
 var mouse_capture = true
 var pull_strength
 
-#func _enter_tree():
-	#set_multiplayer_authority(str(name).to_int())
-
 func _enter_tree():
 	set_multiplayer_authority(str(name).to_int())
+
+func _ready():
+	if not is_multiplayer_authority(): return
 	
 	print("playermodel.gd: ", multiplayer.multiplayer_peer.get_unique_id())
 	
@@ -106,10 +105,7 @@ func _physics_process(delta):
 		
 		# Input handling
 		var input = Input.get_vector("move_left", "move_right", "move_forward", "move_back")	
-<<<<<<< HEAD
 		#var armature_direction = $Armature.transform.basis
-		var direction = (transform.basis * Vector3(input.x, 0, input.y)).normalized()
-=======
 		var direction = (transform.basis * Vector3(input.x, 0, input.y)).normalized()
 		
 		#var pos = get_global_position()
@@ -118,7 +114,6 @@ func _physics_process(delta):
 			#print(position_array)
 			#print(camera.transform.basis)
 			
->>>>>>> a3755899d9ec45b799adedd41d2944c13ba6f5b3
 		
 		#Global.debug.add_property("x vector", input_vector.x, 1)
 		#Global.debug.add_property("z vector", input_vector.z, 2)
@@ -147,12 +142,6 @@ func _physics_process(delta):
 			var a = picked_object.global_transform.origin
 			var b = hand.global_transform.origin
 			picked_object.set_linear_velocity((b-a)*4)
-<<<<<<< HEAD
-@rpc
-func change_input(id,x,y,jump):
-	peer_inputs[id]=[x,y,jump]
-	#print(id, peer_inputs[id] )
-=======
 
 func pick_object():
 	var collider = interaction.get_collider()
@@ -177,4 +166,3 @@ func send_player_input(player_input, player_position, body_basis, camera_basis):
 	var sender_id = multiplayer.get_remote_sender_id()
 	peer_inputs[sender_id]=[player_input, player_position, body_basis, camera_basis]
 	#print(str(multiplayer.get_unique_id()), " received ", str(player_input)) 
->>>>>>> a3755899d9ec45b799adedd41d2944c13ba6f5b3

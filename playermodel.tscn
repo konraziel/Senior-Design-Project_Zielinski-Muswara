@@ -372,7 +372,7 @@ properties/2/path = NodePath("PlayerHead/Camera3D:rotation")
 properties/2/spawn = true
 properties/2/replication_mode = 1
 
-[node name="playermodel" type="CharacterBody3D" groups=["Target"]]
+[node name="playermodel" type="CharacterBody3D"]
 collision_layer = 2
 script = ExtResource("1_k5emc")
 
