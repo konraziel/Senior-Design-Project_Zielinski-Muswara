@@ -2,11 +2,16 @@ extends Node3D
 
 @onready var main_menu = $CanvasLayer/MainMenu
 @onready var address_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/AddressEntry
+@onready var players = $Players
 
 const Player = preload("res://playermodel.tscn")
 const PORT = 9999
 var enet_peer: ENetMultiplayerPeer
 var peers: Array
+
+# Player data 
+var server_data: Dictionary
+var player_data: Dictionary
 
 # Debugging variables
 var number_of_peers: int
@@ -63,10 +68,11 @@ func _on_players_child_entered_tree(node):
 	if enet_peer.host.EVENT_CONNECT:
 		remote_update_peers.rpc()
 		#print("mainscene.gd - Peers: ", peers)
+		for _i in players.get_children(): print(multiplayer.get_unique_id(), " ", _i)
 	else:
 		print_debug("mainscene.gd: EnetConnection Event is wrong!!")
 
-@rpc("call_local") # When we detect a player joins
+@rpc("call_local") # When we detect a player joins, we want to update each local players peer list
 func remote_update_peers():
 	peers = multiplayer.get_peers()
 	print("mainscene.gd: ", multiplayer.get_unique_id(), " - Peers: ", peers)
