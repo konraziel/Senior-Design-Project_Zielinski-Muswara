@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-signal sending_player_input(peer_id, peer_inputs)
+signal recieving_player_input(incoming_peer_inputs)
 
 ###########PEERS-INPUTS##############
 var peer_inputs = {}
@@ -9,10 +9,10 @@ var peer_inputs = {}
 var input_vector:Vector3
 var speed = 4.0
 var gravity = 9.8
-var snap_vector = Vector3.DOWN
+#var snap_vector = Vector3.DOWN
 var mouse_sensitivity = 0.002  # radians/pixel
 const LERP_VAL = .1
-var anim_movement = Vector3.ZERO
+#var anim_movement = Vector3.ZERO
 var jump_strength = 4.5
 
 var input_array=[0,0,false]
@@ -28,14 +28,15 @@ var picked_object
 var mouse_capture = true
 var pull_strength
 
-#func _enter_tree():
-	#set_multiplayer_authority(str(name).to_int())
+func _enter_tree():
+	set_multiplayer_authority(str(name).to_int())
 
 func _ready():
-	set_multiplayer_authority(str(name).to_int())
+	#set_multiplayer_authority(str(name).to_int())
+	if not is_multiplayer_authority(): return
 	
-	print("playermodel.gd: ", multiplayer.multiplayer_peer.get_unique_id())
-	
+	print("playermodel.gd: ", multiplayer.get_unique_id())
+		
 	camera.current = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
@@ -52,9 +53,9 @@ func _unhandled_input(event):
 func _physics_process(delta):
 	#print(str(multiplayer.get_unique_id()), " received ", peer_inputs)
 	
-	if not is_multiplayer_authority(): return
+	#print(str(multiplayer.get_unique_id()), " received ", peer_inputs)
 	
-	if not multiplayer.is_server():
+	if is_multiplayer_authority():
 		
 		var input = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 		input_array = [input.x, input.y, Input.is_action_just_pressed("jump")]
@@ -64,7 +65,10 @@ func _physics_process(delta):
 		camera_basis_array = [camera.transform.basis.y, camera.transform.basis.z]
 		
 		if input != Vector2(0,0):
-			rpc_id(1, "send_player_input", input_array, position_array, body_basis_array, camera_basis_array)
+			rpc("send_player_input", input_array, position_array, body_basis_array, camera_basis_array)
+			print("ID: ", multiplayer.get_unique_id(), " ", peer_inputs)
+		
+		Global.debug.add_property("peer_inputs", peer_inputs, 0)
 		
 		if Input.is_action_just_pressed("alt"):
 			if mouse_capture == false:
@@ -72,15 +76,13 @@ func _physics_process(delta):
 			elif mouse_capture != false:
 				mouse_capture_false()
 		
-	else:
+	if multiplayer.is_server():
 		
-		#print(peer_inputs)
-		
-		if Input.is_action_just_pressed("alt"):
-			if mouse_capture == false:
-				mouse_capture_true()
-			elif mouse_capture != false:
-				mouse_capture_false()
+		#if Input.is_action_just_pressed("alt"):
+			#if mouse_capture == false:
+				#mouse_capture_true()
+			#elif mouse_capture != false:
+				#mouse_capture_false()
 		
 		if Input.is_action_just_pressed("f"):
 			if picked_object== null:
@@ -148,11 +150,14 @@ func mouse_capture_false():
 	mouse_capture = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
-#func _on_sending_player_input(peer_id, peer_inputs):
-	#pass # Replace with function body.
-
 @rpc("any_peer", "call_local")
 func send_player_input(player_input, player_position, body_basis, camera_basis):
 	var sender_id = multiplayer.get_remote_sender_id()
 	peer_inputs[sender_id]=[player_input, player_position, body_basis, camera_basis]
+	#emit_signal("recieving_player_input", peer_inputs)
 	#print(str(multiplayer.get_unique_id()), " received ", str(player_input)) 
+
+#func _on_recieving_player_input(incoming_peer_inputs):
+	#peer_inputs = incoming_peer_inputs
+	#print("test")
+	#pass # Replace with function body.

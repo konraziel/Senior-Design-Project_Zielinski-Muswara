@@ -68,7 +68,7 @@ func _on_players_child_entered_tree(node):
 	if enet_peer.host.EVENT_CONNECT:
 		remote_update_peers.rpc()
 		#print("mainscene.gd - Peers: ", peers)
-		for _i in players.get_children(): print(multiplayer.get_unique_id(), " ", _i)
+		#for _i in players.get_children(): print(multiplayer.get_unique_id(), " ", _i)
 	else:
 		print_debug("mainscene.gd: EnetConnection Event is wrong!!")
 
