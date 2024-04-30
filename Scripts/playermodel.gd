@@ -4,6 +4,16 @@ extends CharacterBody3D
 var peer_inputs:Dictionary
 ##########################
 
+var Health=5
+
+func Hit_Success(Damage):
+	Health-= Damage
+	print("hit successful")
+	if Health<= 0:
+		queue_free()
+
+
+
 var input_vector:Vector3
 var speed = 4.0
 var gravity = 9.8
@@ -103,7 +113,7 @@ func _physics_process(delta):
 		# Input handling
 		var input = Input.get_vector("move_left", "move_right", "move_forward", "move_back")	
 		#var armature_direction = $Armature.transform.basis
-		var direction = (transform.basis * Vector3(send_array[0], 0, send_array[1])).normalized()
+		var direction = (transform.basis * Vector3(input.x, 0, input.y)).normalized()
 		
 		#Global.debug.add_property("x vector", input_vector.x, 1)
 		#Global.debug.add_property("z vector", input_vector.z, 2)
@@ -144,4 +154,4 @@ func _physics_process(delta):
 @rpc
 func change_input(id,x,y,jump):
 	peer_inputs[id]=[x,y,jump]
-	print(id, peer_inputs[id] )
+	#print(id, peer_inputs[id] )

@@ -116,7 +116,7 @@ func reload():
 				var Reload_Amount =min(Current_Weapon.Magazine - Current_Weapon.Current_Ammo, Current_Weapon.Magazine, Current_Weapon.Reserve_Ammo)
 			
 				Current_Weapon.Current_Ammo = Current_Weapon.Current_Ammo +Reload_Amount
-				Current_Weapon.Reserve_Ammo = Current_Weapon.Reserve_Ammo - Reload_Amount
+				#Current_Weapon.Reserve_Ammo = Current_Weapon.Reserve_Ammo - Reload_Amount
 				emit_signal("Update_Ammo", [Current_Weapon.Current_Ammo, Current_Weapon.Reserve_Ammo])
 			else:
 				Animation_Player.play(Current_Weapon.Out_Of_Ammo_Anim) 
