@@ -24,6 +24,8 @@ const LERP_VAL = .1
 #var anim_movement = Vector3.ZERO
 var jump_strength = 4.5
 
+var test_array = [0,0,false]
+
 var input_array=[0,0,false]
 var position_array = [0,0,0]
 var body_basis_array = [[1,0,0],[0,0,1]]
@@ -37,8 +39,8 @@ var picked_object
 var mouse_capture = true
 var pull_strength
 
-func _enter_tree():
-	set_multiplayer_authority(str(name).to_int())
+#func _enter_tree():
+	#set_multiplayer_authority(str(name).to_int())
 
 func _ready():
 	#set_multiplayer_authority(str(name).to_int())
@@ -61,10 +63,11 @@ func _unhandled_input(event):
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
 	#print(str(multiplayer.get_unique_id()), " received ", peer_inputs)
-	
-	#print(str(multiplayer.get_unique_id()), " received ", peer_inputs)
+	#print(str(multiplayer.get_unique_id()), " ", name, " received ", test_array)
 	
 	if is_multiplayer_authority():
+		
+		print(str(multiplayer.get_unique_id()), " ", name, " received ", test_array)
 		
 		var input = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 		input_array = [input.x, input.y, Input.is_action_just_pressed("jump")]
@@ -74,10 +77,15 @@ func _physics_process(delta):
 		camera_basis_array = [camera.transform.basis.y, camera.transform.basis.z]
 		
 		if input != Vector2(0,0):
-			rpc("send_player_input", input_array, position_array, body_basis_array, camera_basis_array)
-			print("ID: ", multiplayer.get_unique_id(), " ", peer_inputs)
+			rpc_id(1, "send_player_input", input_array, position_array, body_basis_array, camera_basis_array)
+			#print("ID: ", multiplayer.get_unique_id(), " ", peer_inputs)
 		
-		Global.debug.add_property("peer_inputs", peer_inputs, 0)
+		#if input_array[0] != test_array[0]:
+			#print("ID: ", multiplayer.get_unique_id()," Input's : ", input_array, " vs. Test: ", test_array)
+			#print("ID: ", multiplayer.get_unique_id(), " ", test_array)
+		
+		Global.debug.add_property("input_array", input_array, 1)
+		#Global.debug.add_property("test_array", test_array, 2)
 		
 		if Input.is_action_just_pressed("alt"):
 			if mouse_capture == false:
@@ -160,12 +168,14 @@ func mouse_capture_false():
 	mouse_capture = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
-@rpc("any_peer", "call_local")
+@rpc("any_peer")
 func send_player_input(player_input, player_position, body_basis, camera_basis):
 	var sender_id = multiplayer.get_remote_sender_id()
-	peer_inputs[sender_id]=[player_input, player_position, body_basis, camera_basis]
+	#peer_inputs[sender_id]=[player_input, player_position, body_basis, camera_basis]
+	test_array = player_input
+	
 	#emit_signal("recieving_player_input", peer_inputs)
-	#print(str(multiplayer.get_unique_id()), " received ", str(player_input)) 
+	#print(str(multiplayer.get_unique_id()), " received ", str(test_array)) 
 
 #func _on_recieving_player_input(incoming_peer_inputs):
 	#peer_inputs = incoming_peer_inputs

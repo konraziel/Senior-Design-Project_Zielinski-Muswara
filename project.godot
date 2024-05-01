@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="SD1_Project"
-run/main_scene="res://MainScene.tscn"
+run/main_scene="res://MultiplayerConnector.tscn"
 config/features=PackedStringArray("4.2")
 config/icon="res://icon.png"
 

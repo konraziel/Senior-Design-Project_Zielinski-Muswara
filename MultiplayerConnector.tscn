@@ -5,6 +5,13 @@
 [node name="Multiplayer" type="Node"]
 script = ExtResource("1_f22lb")
 
+[node name="Level" type="Node" parent="."]
+
+[node name="LevelSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://Level.tscn")
+spawn_path = NodePath("../Level")
+spawn_limit = 1
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="MainMenu" type="PanelContainer" parent="CanvasLayer"]
