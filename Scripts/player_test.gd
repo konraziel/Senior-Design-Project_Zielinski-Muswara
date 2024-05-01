@@ -35,7 +35,7 @@ func _ready():
 		camera.current = true
 	
 	# Only process on server.
-	#set_physics_process(multiplayer.is_server())
+	set_physics_process(multiplayer.is_server())
 
 func _physics_process(delta):
 	# Add the gravity.
