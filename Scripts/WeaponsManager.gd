@@ -23,7 +23,7 @@ func _ready():
 	Initialize.rpc(Start_Weapons)
 
 func _input(event):
-	if is_multiplayer_authority():
+	if get_multiplayer_authority() == multiplayer.get_unique_id():
 	
 		if event.is_action_pressed('Weapon_UP'):
 			Weapon_Indicator = min(Weapon_Indicator+1,Weapon_Stack.size()-1)
@@ -90,7 +90,7 @@ func playAnimRemotely(anim_name):
 
 @rpc("call_local")
 func shoot():
-	if is_multiplayer_authority():
+	if get_multiplayer_authority() == multiplayer.get_unique_id():
 		if Current_Weapon.Current_Ammo != 0:
 			if !Animation_Player.is_playing():
 				Animation_Player.play(Current_Weapon.Shoot_Anim)
@@ -107,7 +107,7 @@ func shoot():
 
 @rpc("call_local")
 func reload():
-	if is_multiplayer_authority():
+	if get_multiplayer_authority() == multiplayer.get_unique_id():
 		if Current_Weapon.Current_Ammo ==Current_Weapon.Magazine:
 			return
 		elif !Animation_Player.is_playing():

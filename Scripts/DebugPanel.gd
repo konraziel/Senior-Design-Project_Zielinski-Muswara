@@ -9,23 +9,22 @@ func _ready():
 	
 	Global.debug=self
 	visible=false
+	set_process(get_multiplayer_authority() == multiplayer.get_unique_id())
 	#add_debug_property("FPS", fps)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if not is_multiplayer_authority(): return
 	
 	fps= "%.2f" % (1.0/delta)
 	add_property("FPS",fps, 1)
 
 func _input(event):
-	if not is_multiplayer_authority(): return
+	if not get_multiplayer_authority() == multiplayer.get_unique_id(): return
 	#toggle debug panel
 	if event.is_action_pressed("debug"):
 		visible=!visible
 
 func add_property(title: String, value, order):
-	if not is_multiplayer_authority(): return
 	
 	var target
 	target = property_container.find_child(title, true, false)  # Try to find Label node with same name
@@ -37,7 +36,6 @@ func add_property(title: String, value, order):
 	elif visible:
 		target.text = title + ": " + str(value)  # Update text value
 		property_container.move_child(target,order)  # Reorder property based on given order value
-
 
 #func add_debug_property(title: String, value):
 	#property= Label.new()

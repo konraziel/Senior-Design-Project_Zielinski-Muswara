@@ -25,6 +25,10 @@ var jump_strength = 4.5
 		player = id
 		# Give authority over the player input to the appropriate peer.
 		$PlayerInput.set_multiplayer_authority(id)
+		$CanvasLayer.set_multiplayer_authority(id)
+		$UI/DebugPanel.set_multiplayer_authority(id)
+		$PlayerHead/Camera3D/WeaponsManager.set_multiplayer_authority(id)
+
 
 # Player synchronized input.
 @onready var input = $PlayerInput
