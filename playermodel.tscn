@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://dsryycglkb1cj"]
+[gd_scene load_steps=25 format=3 uid="uid://dsryycglkb1cj"]
 
 [ext_resource type="Script" path="res://Scripts/player_test.gd" id="1_kvaqc"]
 [ext_resource type="PackedScene" uid="uid://c1q625ijn10vr" path="res://models/rifle.glb" id="2_disx4"]
@@ -10,6 +10,12 @@
 [ext_resource type="PackedScene" uid="uid://cwhjrsrqc2qy6" path="res://models/submachinegun.glb" id="5_l1phk"]
 [ext_resource type="Script" path="res://Scripts/player_input.gd" id="10_501w8"]
 [ext_resource type="Script" path="res://Scripts/HUD.gd" id="12_hf8j0"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jx14m"]
+bg_color = Color(1, 0.207843, 0.72549, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3eor8"]
+bg_color = Color(0, 0.698039, 0.592157, 1)
 
 [sub_resource type="Animation" id="Animation_b5i4n"]
 length = 0.25
@@ -375,6 +381,9 @@ properties/2/replication_mode = 1
 properties/3/path = NodePath(".:player")
 properties/3/spawn = true
 properties/3/replication_mode = 0
+properties/4/path = NodePath("CanvasLayer/HUD/HealthBar:value")
+properties/4/spawn = true
+properties/4/replication_mode = 1
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ydgjc"]
 properties/0/path = NodePath("../PlayerInput:direction")
@@ -384,7 +393,7 @@ properties/1/path = NodePath("../PlayerInput:basis")
 properties/1/spawn = false
 properties/1/replication_mode = 1
 
-[node name="playermodel" type="CharacterBody3D"]
+[node name="playermodel" type="CharacterBody3D" groups=["Target"]]
 collision_layer = 2
 script = ExtResource("1_kvaqc")
 
@@ -424,6 +433,29 @@ text = "Weapon Stack: "
 
 [node name="Weapon Stack" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
+
+[node name="HUD" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HealthBar" type="ProgressBar" parent="CanvasLayer/HUD"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 319.0
+offset_top = 95.0
+offset_right = 808.0
+offset_bottom = 95.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_jx14m")
+theme_override_styles/fill = SubResource("StyleBoxFlat_3eor8")
+max_value = 3.0
+value = 3.0
+show_percentage = false
 
 [node name="PlayerHead" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.79454, -0.0249233)

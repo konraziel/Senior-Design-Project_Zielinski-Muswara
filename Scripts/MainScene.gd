@@ -1,8 +1,10 @@
 extends Node3D
-
+ 
 @onready var main_menu = $CanvasLayer/MainMenu
 @onready var address_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/AddressEntry
 @onready var players = $Players
+
+
 
 const Player = preload("res://playermodel.tscn")
 const PORT = 9999
@@ -38,6 +40,7 @@ func _physics_process(delta):
 
 func _on_host_button_pressed():
 	main_menu.hide()
+
 	
 	enet_peer = ENetMultiplayerPeer.new()
 	enet_peer.create_server(PORT, 2)

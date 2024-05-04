@@ -1,10 +1,13 @@
 extends CharacterBody3D
 
+@onready var HUD = $CanvasLayer/HUD
+@onready var healthbar = $CanvasLayer/HUD/HealthBar
 var Health=5
 
 func Hit_Success(Damage):
 	Health-= Damage
-	print("hit successful")
+	healthbar.value=Health
+	#print("hit successful")
 	if Health<= 0:
 		queue_free()
 
