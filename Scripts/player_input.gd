@@ -5,15 +5,16 @@ extends MultiplayerSynchronizer
 
 # Synchronized property.
 @export var direction := Vector2()
-@export var basis := Basis()
+@export var mouse_move_relative := Vector2()
+#@export var basis := Basis()
 
 @onready var player = $".."
 @onready var camera = $"../PlayerHead/Camera3D"
 @onready var interaction = $"../PlayerHead/Camera3D/interaction"
 @onready var hand = $"../PlayerHead/Camera3D/hand"
-
+ 
 var mouse_capture = true
-var mouse_sensitivity = 0.002  # radians/pixel
+#var mouse_sensitivity = 0.002  # radians/pixel
 
 func _ready():
 	# Only process for the local player.
@@ -21,12 +22,9 @@ func _ready():
 	set_process(get_multiplayer_authority() == multiplayer.get_unique_id())
 	set_process_unhandled_input(get_multiplayer_authority() == multiplayer.get_unique_id())
 
-func _unhandled_input(event):
+func _unhandled_input(event: InputEvent):
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-		player.rotate_y(-event.relative.x * mouse_sensitivity)
-		camera.rotate_x(-event.relative.y * mouse_sensitivity)
-		player.rotation.y = wrapf(player.rotation.y, deg_to_rad(0), deg_to_rad(360))
-		camera.rotation.x = clamp(camera.rotation.x, -1.2, 1.2)
+		mouse_move_relative = event.relative
 
 @rpc("call_local")
 func jump():
@@ -48,7 +46,6 @@ func _process(delta):
 			mouse_capture_false()
 	
 	direction = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	basis = player.transform.basis
 	
 	#if direction != Vector2():
 		#print(basis)

@@ -16,7 +16,7 @@ func Hit_Success(Damage):
 var input_vector:Vector3
 var speed = 4.0
 var gravity = 9.8
-#var mouse_sensitivity = 0.002  # radians/pixel
+var mouse_sensitivity = 0.002  # radians/pixel
 const LERP_VAL = .1
 var jump_strength = 4.5
 
@@ -34,32 +34,53 @@ var jump_strength = 4.5
 		$UI/DebugPanel.set_multiplayer_authority(id)
 		$PlayerHead/Camera3D/WeaponsManager.set_multiplayer_authority(id)
 
-
 # Player synchronized input.
 @onready var input = $PlayerInput
+var prev_mouse_move := Vector2()
+var camera_move := Vector2()
 
 func _ready():
-	# Set the camera as current if we are this player.
 	if player == multiplayer.get_unique_id():
 		camera.current = true
 	
-	# Only process on server.
 	set_physics_process(multiplayer.is_server())
+	set_process(multiplayer.is_server())
+
+#func _unhandled_input(event):
+	#if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+		#rotate_y(-input.mouse_move_relative.x * mouse_sensitivity)
+		#camera.rotate_x(-input.mouse_move_relative.y * mouse_sensitivity)
+		#rotation.y = wrapf(rotation.y, deg_to_rad(0), deg_to_rad(360))
+		#camera.rotation.x = clamp(camera.rotation.x, -1.2, 1.2)
+
+func _process(_delta):
+	# Camera and Body rotation
+	if input.mouse_move_relative == prev_mouse_move:
+		camera_move = Vector2.ZERO
+	else:
+		camera_move = input.mouse_move_relative
+	
+	rotate_y(-camera_move.x * mouse_sensitivity)
+	camera.rotate_x(-camera_move.y * mouse_sensitivity)
+	rotation.y = wrapf(rotation.y, deg_to_rad(0), deg_to_rad(360))
+	camera.rotation.x = clamp(camera.rotation.x, -1.2, 1.2)
+	
+	prev_mouse_move = input.mouse_move_relative
 
 func _physics_process(delta):
-	# Add the gravity.
+	# Gravity.
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 
 	# Handle jump.
 	if input.jumping and is_on_floor():
 		velocity.y = jump_strength
-
+	
 	# Reset jump state.
 	input.jumping = false
 	
 	# Input handling	
-	var direction = (input.basis * Vector3(input.direction.x, 0, input.direction.y)).normalized()
+	var direction = (transform.basis * Vector3(input.direction.x, 0, input.direction.y)).normalized()
 	
 	#Global.debug.add_property("x vector", input_vector.x, 1)
 	#Global.debug.add_property("z vector", input_vector.z, 2)
