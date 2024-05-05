@@ -145,7 +145,7 @@ func Hit_Scan_Collision(Collision_Point):
 	var Bullet_Collision = get_world_3d().direct_space_state.intersect_ray(New_Interaction)
 	
 	if Bullet_Collision:
-		print(Bullet_Collision.collider)
+		print(multiplayer.get_unique_id(),"shot", Bullet_Collision.collider, multiplayer.is_server())
 		Hit_Scan_Damage(Bullet_Collision.collider)
 
 func Hit_Scan_Damage(Collider):

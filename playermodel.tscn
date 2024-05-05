@@ -435,6 +435,7 @@ text = "Weapon Stack: "
 layout_mode = 2
 
 [node name="HUD" type="Control" parent="CanvasLayer"]
+visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
@@ -453,8 +454,8 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_jx14m")
 theme_override_styles/fill = SubResource("StyleBoxFlat_3eor8")
-max_value = 3.0
-value = 3.0
+max_value = 5.0
+value = 5.0
 show_percentage = false
 
 [node name="PlayerHead" type="Node3D" parent="."]
@@ -526,6 +527,7 @@ root_path = NodePath("../ServerSynchronizer")
 replication_config = SubResource("SceneReplicationConfig_ydgjc")
 script = ExtResource("10_501w8")
 
+[connection signal="health_change" from="." to="CanvasLayer" method="_on_playermodel_health_change"]
 [connection signal="Update_Ammo" from="PlayerHead/Camera3D/WeaponsManager" to="CanvasLayer" method="_on_weapons_manager_update_ammo"]
 [connection signal="Update_Weapon_Stack" from="PlayerHead/Camera3D/WeaponsManager" to="CanvasLayer" method="_on_weapons_manager_update_weapon_stack"]
 [connection signal="Weapon_Changed" from="PlayerHead/Camera3D/WeaponsManager" to="CanvasLayer" method="_on_weapons_manager_weapon_changed"]

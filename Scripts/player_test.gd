@@ -1,15 +1,17 @@
 extends CharacterBody3D
 
-@onready var HUD = $CanvasLayer/HUD
-@onready var healthbar = $CanvasLayer/HUD/HealthBar
+signal health_change 
+
 var Health=5
 
 func Hit_Success(Damage):
 	Health-= Damage
-	healthbar.value=Health
+	emit_signal("health_change", Health)
 	#print("hit successful")
 	if Health<= 0:
 		queue_free()
+
+
 
 var input_vector:Vector3
 var speed = 4.0

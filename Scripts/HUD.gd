@@ -3,6 +3,15 @@ extends CanvasLayer
 @onready var CurrentAmmoLabel : Label = $"VBoxContainer/HBoxContainer2/Current Ammo"
 @onready var CurrentWeaponStack : Label = $"VBoxContainer/HBoxContainer3/Weapon Stack"
 
+@onready var HUD = $HUD
+@onready var healthbar = $HUD/HealthBar
+
+
+
+func _ready():
+	if get_multiplayer_authority() == multiplayer.get_unique_id():
+		HUD.show()
+	
 
 func _on_weapons_manager_update_ammo(Ammo):
 	if get_multiplayer_authority() == multiplayer.get_unique_id():
@@ -17,3 +26,7 @@ func _on_weapons_manager_update_weapon_stack(Weapon_Stack):
 func _on_weapons_manager_weapon_changed(Weapon_Name):
 	if get_multiplayer_authority() == multiplayer.get_unique_id():
 		CurrentWeaponLabel.text=(Weapon_Name)
+
+
+func _on_playermodel_health_change(health):
+	healthbar.value=health
