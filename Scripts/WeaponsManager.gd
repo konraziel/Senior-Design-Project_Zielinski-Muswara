@@ -16,28 +16,47 @@ var Weapon_List = {}
 @export var _weapon_resources: Array[Weapon_Resource]
 @export var Start_Weapons: Array[String]
 @onready var Bullet_Point = $FPS_Rig/Bullet_Point
+@onready var input = $"../../../PlayerInput"
+@onready var player = $"../../.."
 
 enum {NULL, HITSCAN, PROJECTILE}
 
 func _ready():
 	Initialize.rpc(Start_Weapons)
+		
+	set_process(multiplayer.is_server())
 
-func _input(event):
-	if get_multiplayer_authority() == multiplayer.get_unique_id():
+#func _input(event):
+	#if get_multiplayer_authority() == multiplayer.get_unique_id():
+	#
+		#if event.is_action_pressed('Weapon_UP'):
+			#Weapon_Indicator = min(Weapon_Indicator+1,Weapon_Stack.size()-1)
+			#_exit.rpc(Weapon_Stack[Weapon_Indicator])
+		#if event.is_action_pressed('Weapon_DOWN'):
+			#Weapon_Indicator = max(Weapon_Indicator-1,0)
+			#_exit.rpc(Weapon_Stack[Weapon_Indicator])
+		#if event.is_action_pressed('Shoot'):
+			#shoot.rpc()
+		#if event.is_action_pressed('Reload'):
+			#reload.rpc()
+
+func _process(delta):
+	if input.wheel_up:
+		Weapon_Indicator = min(Weapon_Indicator+1,Weapon_Stack.size()-1)
+		_exit.rpc(Weapon_Stack[Weapon_Indicator])
+	if input.wheel_down:
+		Weapon_Indicator = max(Weapon_Indicator-1,0)
+		_exit.rpc(Weapon_Stack[Weapon_Indicator])
+	if input.shooting:
+		shoot.rpc()
+	if input.reloading:
+		reload.rpc()
 	
-		if event.is_action_pressed('Weapon_UP'):
-			Weapon_Indicator = min(Weapon_Indicator+1,Weapon_Stack.size()-1)
-			_exit.rpc(Weapon_Stack[Weapon_Indicator])
-		if event.is_action_pressed('Weapon_DOWN'):
-			Weapon_Indicator = max(Weapon_Indicator-1,0)
-			_exit.rpc(Weapon_Stack[Weapon_Indicator])
-		if event.is_action_pressed('Shoot'):
-			shoot.rpc()
-		if event.is_action_pressed('Reload'):
-			reload.rpc()
+	input.wheel_up = false
+	input.wheel_down = false
+	input.shooting = false
+	input.reloading = false
 
-# Strange jank with activation anim running multiple times when you switch weapons
-# Also if you change weapons to smg before a player joins, and then the client joins, the client sees the rifle, even though the smg is selected
 @rpc("call_local")
 func Initialize(_Start_Weapons: Array):
 	for weapon in _weapon_resources:
@@ -90,7 +109,7 @@ func playAnimRemotely(anim_name):
 
 @rpc("call_local")
 func shoot():
-	if get_multiplayer_authority() == multiplayer.get_unique_id():
+	if player.player == multiplayer.get_unique_id():
 		if Current_Weapon.Current_Ammo != 0:
 			if !Animation_Player.is_playing():
 				Animation_Player.play(Current_Weapon.Shoot_Anim)
@@ -107,7 +126,7 @@ func shoot():
 
 @rpc("call_local")
 func reload():
-	if get_multiplayer_authority() == multiplayer.get_unique_id():
+	if player.player == multiplayer.get_unique_id():
 		if Current_Weapon.Current_Ammo ==Current_Weapon.Magazine:
 			return
 		elif !Animation_Player.is_playing():
@@ -137,7 +156,6 @@ func Get_Camera_Collision()->Vector3:
 	else:
 		return Ray_End
 
-
 func Hit_Scan_Collision(Collision_Point):
 	#if not is_multiplayer_authority(): return
 	var Bullet_Direction = (Collision_Point - Bullet_Point.get_global_transform().origin).normalized()
@@ -145,9 +163,9 @@ func Hit_Scan_Collision(Collision_Point):
 	var Bullet_Collision = get_world_3d().direct_space_state.intersect_ray(New_Interaction)
 	
 	if Bullet_Collision:
-		print(multiplayer.get_unique_id(),"shot", Bullet_Collision.collider, multiplayer.is_server())
+		print(multiplayer.get_unique_id()," shot ", Bullet_Collision.collider, " ", multiplayer.is_server())
 		Hit_Scan_Damage(Bullet_Collision.collider)
 
 func Hit_Scan_Damage(Collider):
 	if Collider.is_in_group("Target") and Collider.has_method("Hit_Success"):
-		Collider.Hit_Success(Current_Weapon.Damage)
+		Collider.Hit_Success.rpc(Current_Weapon.Damage)

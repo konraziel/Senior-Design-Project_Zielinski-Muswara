@@ -2,23 +2,25 @@ extends MultiplayerSynchronizer
 
 # Set via RPC to simulate is_action_just_pressed.
 @export var jumping := false
+@export var shooting := false
+@export var reloading := false
+@export var wheel_down := false
+@export var wheel_up := false
 
 # Synchronized property.
 @export var direction := Vector2()
 @export var mouse_move_relative := Vector2()
-#@export var basis := Basis()
 
 @onready var player = $".."
-@onready var camera = $"../PlayerHead/Camera3D"
-@onready var interaction = $"../PlayerHead/Camera3D/interaction"
-@onready var hand = $"../PlayerHead/Camera3D/hand"
+#@onready var camera = $"../PlayerHead/Camera3D"
  
 var mouse_capture = true
 #var mouse_sensitivity = 0.002  # radians/pixel
 
 func _ready():
 	# Only process for the local player.
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	if player.player == multiplayer.get_unique_id():
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	set_process(get_multiplayer_authority() == multiplayer.get_unique_id())
 	set_process_unhandled_input(get_multiplayer_authority() == multiplayer.get_unique_id())
 
@@ -29,6 +31,22 @@ func _unhandled_input(event: InputEvent):
 @rpc("call_local")
 func jump():
 	jumping = true
+
+@rpc("call_local")
+func shoot():
+	shooting = true
+
+@rpc("call_local")
+func reload():
+	reloading = true
+
+@rpc("call_local")
+func scroll_down():
+	wheel_down = true
+
+@rpc("call_local")
+func scroll_up():
+	wheel_up = true
 
 func mouse_capture_true():
 	mouse_capture = true
@@ -47,8 +65,14 @@ func _process(delta):
 	
 	direction = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	
-	#if direction != Vector2():
-		#print(basis)
+	if Input.is_action_just_pressed("Shoot"):
+		shoot.rpc()
+	if Input.is_action_just_pressed("Reload"):
+		reload.rpc()
+	if Input.is_action_just_pressed("Weapon_DOWN"):
+		scroll_down.rpc()
+	if Input.is_action_just_pressed("Weapon_UP"):
+		scroll_up.rpc()
 	
 	if Input.is_action_just_pressed("ui_accept"):
 		jump.rpc()

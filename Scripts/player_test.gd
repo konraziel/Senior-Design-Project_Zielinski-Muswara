@@ -4,14 +4,13 @@ signal health_change
 
 var Health=5
 
+@rpc("call_local", "any_peer")
 func Hit_Success(Damage):
 	Health-= Damage
 	emit_signal("health_change", Health)
-	#print("hit successful")
+	#print(multiplayer.get_unique_id(), " hit successful ", Health)
 	if Health<= 0:
 		queue_free()
-
-
 
 var input_vector:Vector3
 var speed = 4.0
@@ -30,9 +29,11 @@ var jump_strength = 4.5
 		player = id
 		# Give authority over the player input to the appropriate peer.
 		$PlayerInput.set_multiplayer_authority(id)
-		$CanvasLayer.set_multiplayer_authority(id)
-		$UI/DebugPanel.set_multiplayer_authority(id)
-		$PlayerHead/Camera3D/WeaponsManager.set_multiplayer_authority(id)
+		#$CanvasLayer.set_multiplayer_authority(id)
+		#$UI/DebugPanel.set_multiplayer_authority(id)
+		#$PlayerHead/Camera3D/WeaponsManager.set_multiplayer_authority(id)
+
+#@export var player_name = str(name).to_int()
 
 # Player synchronized input.
 @onready var input = $PlayerInput
