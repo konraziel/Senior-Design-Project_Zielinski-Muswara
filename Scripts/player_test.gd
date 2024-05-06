@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
 signal health_change 
-
+signal shot
 var Health=5
 
 func Hit_Success(Damage):
@@ -32,7 +32,7 @@ var jump_strength = 4.5
 		$PlayerInput.set_multiplayer_authority(id)
 		$CanvasLayer.set_multiplayer_authority(id)
 		$UI/DebugPanel.set_multiplayer_authority(id)
-		$PlayerHead/Camera3D/WeaponsManager.set_multiplayer_authority(id)
+		#$PlayerHead/Camera3D/WeaponsManager.set_multiplayer_authority(id)
 
 # Player synchronized input.
 @onready var input = $PlayerInput
@@ -75,10 +75,13 @@ func _physics_process(delta):
 	# Handle jump.
 	if input.jumping and is_on_floor():
 		velocity.y = jump_strength
+		print(multiplayer.get_unique_id(), " jumped")
 	
+	if input.shooting:
+		emit_signal("shot")
 	# Reset jump state.
 	input.jumping = false
-	
+	input.shooting = false
 	# Input handling	
 	var direction = (transform.basis * Vector3(input.direction.x, 0, input.direction.y)).normalized()
 	

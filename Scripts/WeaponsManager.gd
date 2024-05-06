@@ -3,7 +3,7 @@ extends Node3D
 signal Weapon_Changed
 signal Update_Ammo
 signal Update_Weapon_Stack
-
+@onready var input = $"../../../PlayerInput"
 @onready var Animation_Player = $FPS_Rig/AnimationGuns
 var Current_Weapon = null
 var Weapon_Stack = [] # An Array of Weapons Currently Held by the Player
@@ -20,7 +20,10 @@ var Weapon_List = {}
 enum {NULL, HITSCAN, PROJECTILE}
 
 func _ready():
+	set_process(get_multiplayer_authority() == multiplayer.get_unique_id())
 	Initialize.rpc(Start_Weapons)
+	#set_physics_process(multiplayer.is_server())
+	#set_process(multiplayer.is_server())
 
 func _input(event):
 	if get_multiplayer_authority() == multiplayer.get_unique_id():
@@ -31,7 +34,8 @@ func _input(event):
 		if event.is_action_pressed('Weapon_DOWN'):
 			Weapon_Indicator = max(Weapon_Indicator-1,0)
 			_exit.rpc(Weapon_Stack[Weapon_Indicator])
-		if event.is_action_pressed('Shoot'):
+		if input.shooting:
+			input.shooting=false
 			shoot.rpc()
 		if event.is_action_pressed('Reload'):
 			reload.rpc()
@@ -151,3 +155,9 @@ func Hit_Scan_Collision(Collision_Point):
 func Hit_Scan_Damage(Collider):
 	if Collider.is_in_group("Target") and Collider.has_method("Hit_Success"):
 		Collider.Hit_Success(Current_Weapon.Damage)
+
+
+
+
+func _on_playermodel_shot():
+	shoot.rpc()

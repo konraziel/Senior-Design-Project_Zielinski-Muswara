@@ -1,8 +1,9 @@
 extends MultiplayerSynchronizer
 
+
 # Set via RPC to simulate is_action_just_pressed.
 @export var jumping := false
-
+@export var shooting := false
 # Synchronized property.
 @export var direction := Vector2()
 @export var mouse_move_relative := Vector2()
@@ -29,6 +30,10 @@ func _unhandled_input(event: InputEvent):
 @rpc("call_local")
 func jump():
 	jumping = true
+@rpc("call_local")
+func shoot():
+	shooting= true
+
 
 func mouse_capture_true():
 	mouse_capture = true
@@ -52,3 +57,6 @@ func _process(delta):
 	
 	if Input.is_action_just_pressed("ui_accept"):
 		jump.rpc()
+	if Input.is_action_just_pressed("Shoot"):
+		shoot.rpc()
+	
