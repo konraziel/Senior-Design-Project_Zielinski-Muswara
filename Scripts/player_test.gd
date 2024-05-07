@@ -110,9 +110,12 @@ func _on_canvas_layer_respawn():
 	self.position=Vector3.ZERO
 	self.Health=5
 
-
+@rpc("call_local", "any_peer")
 func _on_weapons_manager_elimination():
 	points+=1
 	if points==2:
-		winnerlabel.text= str(multiplayer.get_unique_id())+" wins"
-		winnerlabel.show()
+		game_result.rpc(str(multiplayer.get_unique_id()))
+@rpc("call_local", "any_peer")
+func game_result(winner):
+	winnerlabel.text= winner+" wins"
+	winnerlabel.show()
