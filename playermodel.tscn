@@ -443,6 +443,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="Counter" type="ProgressBar" parent="CanvasLayer/HUD"]
+visible = false
 layout_mode = 0
 offset_left = 434.0
 offset_top = 30.0

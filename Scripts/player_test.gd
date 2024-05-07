@@ -108,3 +108,4 @@ func _physics_process(delta):
 func _on_canvas_layer_respawn():
 	#pass
 	self.position=Vector3.ZERO
+	self.Health=5
