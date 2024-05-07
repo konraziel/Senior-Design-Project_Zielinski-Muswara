@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
 signal health_change 
-
+signal respawn
 var Health=5
 
 @rpc("call_local", "any_peer")
@@ -10,8 +10,9 @@ func Hit_Success(Damage):
 	emit_signal("health_change", Health)
 	#print(multiplayer.get_unique_id(), " hit successful ", Health)
 	if Health<= 0:
-		queue_free()
+		emit_signal("respawn")
 
+	
 var input_vector:Vector3
 var speed = 4.0
 var gravity = 9.8
@@ -102,3 +103,8 @@ func _physics_process(delta):
 		#var c = get_slide_collision(i)
 		#if c.get_collider() is RigidBody3D:
 			#c.get_collider().apply_central_impulse(-c.get_normal() * speed * 0.05)
+
+
+func _on_canvas_layer_respawn():
+	#pass
+	self.position=Vector3.ZERO

@@ -442,6 +442,13 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
+[node name="Counter" type="ProgressBar" parent="CanvasLayer/HUD"]
+layout_mode = 0
+offset_left = 434.0
+offset_top = 30.0
+offset_right = 622.0
+offset_bottom = 57.0
+
 [node name="HealthBar" type="ProgressBar" parent="CanvasLayer/HUD"]
 layout_mode = 1
 anchors_preset = 15
@@ -529,6 +536,8 @@ replication_config = SubResource("SceneReplicationConfig_ydgjc")
 script = ExtResource("10_501w8")
 
 [connection signal="health_change" from="." to="CanvasLayer" method="_on_playermodel_health_change"]
+[connection signal="respawn" from="." to="CanvasLayer" method="_on_playermodel_respawn"]
+[connection signal="respawn" from="CanvasLayer" to="." method="_on_canvas_layer_respawn"]
 [connection signal="Update_Ammo" from="PlayerHead/Camera3D/WeaponsManager" to="CanvasLayer" method="_on_weapons_manager_update_ammo"]
 [connection signal="Update_Weapon_Stack" from="PlayerHead/Camera3D/WeaponsManager" to="CanvasLayer" method="_on_weapons_manager_update_weapon_stack"]
 [connection signal="Weapon_Changed" from="PlayerHead/Camera3D/WeaponsManager" to="CanvasLayer" method="_on_weapons_manager_weapon_changed"]
