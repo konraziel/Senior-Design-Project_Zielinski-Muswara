@@ -3,7 +3,7 @@ extends CharacterBody3D
 signal health_change 
 signal respawn
 var Health=5
-
+var points=0
 @rpc("call_local", "any_peer")
 func Hit_Success(Damage):
 	Health-= Damage
@@ -109,3 +109,9 @@ func _on_canvas_layer_respawn():
 	#pass
 	self.position=Vector3.ZERO
 	self.Health=5
+
+
+func _on_weapons_manager_elimination():
+	points+=1
+	if points==2:
+		print("win")
