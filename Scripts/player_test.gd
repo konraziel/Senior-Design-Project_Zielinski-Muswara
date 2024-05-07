@@ -23,7 +23,7 @@ var jump_strength = 4.5
 @onready var camera = $PlayerHead/Camera3D
 @onready var interaction = $PlayerHead/Camera3D/interaction
 @onready var hand = $PlayerHead/Camera3D/hand
-
+@onready var winnerlabel = $CanvasLayer/GameHUD/WinnerLabel
 # Set by the authority, synchronized on spawn.
 @export var player := 1 :
 	set(id):
@@ -114,4 +114,5 @@ func _on_canvas_layer_respawn():
 func _on_weapons_manager_elimination():
 	points+=1
 	if points==2:
-		print("win")
+		winnerlabel.text= str(multiplayer.get_unique_id())+" wins"
+		winnerlabel.show()
