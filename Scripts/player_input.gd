@@ -58,6 +58,7 @@ func mouse_capture_false():
 func _process(delta):
 	# Get the input direction and handle the movement/deceleration.
 	if Input.is_action_just_pressed("alt"):
+		set_replication_interval(0)
 		if mouse_capture == false:
 			mouse_capture_true()
 		elif mouse_capture != false:
