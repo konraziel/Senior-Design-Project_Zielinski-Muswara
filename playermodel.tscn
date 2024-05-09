@@ -467,13 +467,7 @@ max_value = 5.0
 value = 5.0
 show_percentage = false
 
-[node name="GameHUD" type="Control" parent="CanvasLayer"]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="WinnerLabel" type="Label" parent="CanvasLayer/GameHUD"]
+[node name="WinnerLabel" type="Label" parent="CanvasLayer/HUD"]
 visible = false
 layout_mode = 0
 offset_left = 485.0
