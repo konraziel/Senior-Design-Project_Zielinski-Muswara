@@ -59,7 +59,7 @@ func _process(delta):
 	input.shooting = false
 	input.reloading = false
 
-@rpc("call_local")
+@rpc("call_local", "reliable")
 func Initialize(_Start_Weapons: Array):
 	for weapon in _weapon_resources:
 		Weapon_List[weapon.Weapon_Name]= weapon
@@ -70,21 +70,21 @@ func Initialize(_Start_Weapons: Array):
 	emit_signal("Update_Weapon_Stack", Weapon_Stack)
 	_enter.rpc()
 
-@rpc("call_local")
+@rpc("call_local", "reliable")
 func _enter():
 	#print(str(get_multiplayer_authority()))
 	Animation_Player.play(Current_Weapon.Activate_Anim)
 	emit_signal("Weapon_Changed", Current_Weapon.Weapon_Name)
 	emit_signal("Update_Ammo", [Current_Weapon.Current_Ammo, Current_Weapon.Reserve_Ammo])
 
-@rpc("call_local")
+@rpc("call_local", "reliable")
 func _exit(_next_weapon : String):
 	if _next_weapon != Current_Weapon.Weapon_Name:
 		if Animation_Player.get_current_animation() != Current_Weapon.Deactivate_Anim:
 			Animation_Player.play(Current_Weapon.Deactivate_Anim)
 			Next_Weapon=_next_weapon
 
-@rpc("call_local")
+@rpc("call_local", "reliable")
 func Change_Weapon(weapon_name:String):
 	var Weapon_Index = Weapon_Stack.find(weapon_name)
 	if Weapon_Index != -1:
@@ -102,14 +102,14 @@ func _on_animation_guns_animation_finished(anim_name):
 func _on_animation_guns_animation_started(anim_name):
 	playAnimRemotely.rpc(anim_name)
 
-@rpc("any_peer", "call_remote")
+@rpc("any_peer", "call_remote", "reliable")
 func playAnimRemotely(anim_name):
 	if anim_name == Current_Weapon.Shoot_Anim:
 		Animation_Player.play(Current_Weapon.Shoot_Anim)
 	elif anim_name == Current_Weapon.Reload_Anim:
 		Animation_Player.play(Current_Weapon.Reload_Anim)
 
-@rpc("call_local")
+@rpc("call_local", "reliable")
 func shoot():
 	if player.player == multiplayer.get_unique_id():
 		if Current_Weapon.Current_Ammo != 0:
@@ -126,7 +126,7 @@ func shoot():
 					PROJECTILE:
 						pass
 
-@rpc("call_local")
+@rpc("call_local", "reliable")
 func reload():
 	if player.player == multiplayer.get_unique_id():
 		if Current_Weapon.Current_Ammo ==Current_Weapon.Magazine:

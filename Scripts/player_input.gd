@@ -28,23 +28,23 @@ func _unhandled_input(event: InputEvent):
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		mouse_move_relative = event.relative
 
-@rpc("call_local")
+@rpc("call_local", "reliable")
 func jump():
 	jumping = true
 
-@rpc("call_local")
+@rpc("call_local", "reliable")
 func shoot():
 	shooting = true
 
-@rpc("call_local")
+@rpc("call_local", "reliable")
 func reload():
 	reloading = true
 
-@rpc("call_local")
+@rpc("call_local", "reliable")
 func scroll_down():
 	wheel_down = true
 
-@rpc("call_local")
+@rpc("call_local", "reliable")
 func scroll_up():
 	wheel_up = true
 
