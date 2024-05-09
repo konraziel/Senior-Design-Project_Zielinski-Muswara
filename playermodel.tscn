@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://dsryycglkb1cj"]
+[gd_scene load_steps=25 format=3 uid="uid://b2ytin0jb30xb"]
 
 [ext_resource type="Script" path="res://Scripts/player_test.gd" id="1_kvaqc"]
 [ext_resource type="PackedScene" uid="uid://c1q625ijn10vr" path="res://models/rifle.glb" id="2_disx4"]
@@ -467,6 +467,14 @@ max_value = 5.0
 value = 5.0
 show_percentage = false
 
+[node name="WinnerLabel" type="Label" parent="CanvasLayer/HUD"]
+visible = false
+layout_mode = 0
+offset_left = 485.0
+offset_top = 14.0
+offset_right = 539.0
+offset_bottom = 42.0
+
 [node name="PlayerHead" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.79454, -0.0249233)
 
@@ -542,5 +550,6 @@ script = ExtResource("10_501w8")
 [connection signal="Update_Ammo" from="PlayerHead/Camera3D/WeaponsManager" to="CanvasLayer" method="_on_weapons_manager_update_ammo"]
 [connection signal="Update_Weapon_Stack" from="PlayerHead/Camera3D/WeaponsManager" to="CanvasLayer" method="_on_weapons_manager_update_weapon_stack"]
 [connection signal="Weapon_Changed" from="PlayerHead/Camera3D/WeaponsManager" to="CanvasLayer" method="_on_weapons_manager_weapon_changed"]
+[connection signal="elimination" from="PlayerHead/Camera3D/WeaponsManager" to="." method="_on_weapons_manager_elimination"]
 [connection signal="animation_finished" from="PlayerHead/Camera3D/WeaponsManager/FPS_Rig/AnimationGuns" to="PlayerHead/Camera3D/WeaponsManager" method="_on_animation_guns_animation_finished"]
 [connection signal="animation_started" from="PlayerHead/Camera3D/WeaponsManager/FPS_Rig/AnimationGuns" to="PlayerHead/Camera3D/WeaponsManager" method="_on_animation_guns_animation_started"]

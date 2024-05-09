@@ -1,5 +1,7 @@
 extends Node3D
 
+signal elimination
+
 signal Weapon_Changed
 signal Update_Ammo
 signal Update_Weapon_Stack
@@ -168,4 +170,6 @@ func Hit_Scan_Collision(Collision_Point):
 
 func Hit_Scan_Damage(Collider):
 	if Collider.is_in_group("Target") and Collider.has_method("Hit_Success"):
+		if Collider.Health == 1:
+			emit_signal("elimination")
 		Collider.Hit_Success.rpc(Current_Weapon.Damage)

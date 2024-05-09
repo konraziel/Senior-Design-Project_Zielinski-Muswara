@@ -3,7 +3,7 @@ extends CharacterBody3D
 signal health_change 
 signal respawn
 var Health=5
-
+var points=0
 @rpc("call_local", "any_peer")
 func Hit_Success(Damage):
 	Health-= Damage
@@ -23,7 +23,7 @@ var jump_strength = 4.5
 @onready var camera = $PlayerHead/Camera3D
 @onready var interaction = $PlayerHead/Camera3D/interaction
 @onready var hand = $PlayerHead/Camera3D/hand
-
+@onready var winnerlabel = $CanvasLayer/HUD/WinnerLabel
 # Set by the authority, synchronized on spawn.
 @export var player := 1 :
 	set(id):
@@ -109,3 +109,13 @@ func _on_canvas_layer_respawn():
 	#pass
 	self.position=Vector3.ZERO
 	self.Health=5
+
+@rpc("call_local", "any_peer")
+func _on_weapons_manager_elimination():
+	points+=1
+	if points==2:
+		game_result.rpc(str(multiplayer.get_unique_id()))
+@rpc("call_local", "any_peer")
+func game_result(winner):
+	winnerlabel.text= winner+" wins"
+	winnerlabel.show()
