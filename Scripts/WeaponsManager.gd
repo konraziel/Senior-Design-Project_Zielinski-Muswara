@@ -102,7 +102,7 @@ func _on_animation_guns_animation_finished(anim_name):
 func _on_animation_guns_animation_started(anim_name):
 	playAnimRemotely.rpc(anim_name)
 
-@rpc("call_remote")
+@rpc("any_peer", "call_remote")
 func playAnimRemotely(anim_name):
 	if anim_name == Current_Weapon.Shoot_Anim:
 		Animation_Player.play(Current_Weapon.Shoot_Anim)

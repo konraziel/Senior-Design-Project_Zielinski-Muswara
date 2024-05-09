@@ -4,10 +4,7 @@ extends Node
 @onready var main_menu = $CanvasLayer/MainMenu
 @onready var address_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/AddressEntry
 
-#const Player = preload("res://playermodel.tscn")
 const PORT = 9999
-#var enet_peer: ENetMultiplayerPeer
-#var peers: Array
 
 # Previous Code for Network test
 #var num_players = 20
@@ -44,26 +41,13 @@ const PORT = 9999
 #func _process(delta):
 	#pass
 
-# Player data 
-#var server_data: Dictionary
-#var player_data: Dictionary
-
 # Debugging variables
 #var number_of_peers: int
 #var peer_ID:int
 #var test: Array
 var multiplayer_peer_check: MultiplayerPeer
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	#get_tree().paused = true
-	multiplayer.server_relay = false
-	
-	#set_physics_process(!is_physics_processing())
-	#set_process(!is_processing())
-
 func _on_host_button_pressed():
-	#main_menu.hide()
 	
 	var enet_peer = ENetMultiplayerPeer.new()
 	enet_peer.create_server(PORT, 2)
@@ -78,7 +62,6 @@ func _on_host_button_pressed():
 	print("mainscene.gd - current multiplayer_peer id: ", multiplayer_peer_check.get_unique_id())
 
 func _on_join_button_pressed():
-	#main_menu.hide()
 	
 	var enet_peer = ENetMultiplayerPeer.new()
 	enet_peer.create_client("localhost", PORT)
@@ -95,7 +78,9 @@ func _on_join_button_pressed():
 func start_game():
 	# Hide the UI and unpause to start the game.
 	main_menu.hide()
-	#get_tree().paused = false
+	Engine.max_fps = 20
+	Engine.physics_ticks_per_second = 30
+	
 	# Only change level on the server.
 	# Clients will instantiate the level via the spawner.
 	if multiplayer.is_server():
@@ -111,8 +96,8 @@ func change_level(scene: PackedScene):
 	# Add new level.
 	level.add_child(scene.instantiate())
 
-func _input(event):
-	if not multiplayer.is_server():
-		return
-	if event.is_action("ui_home") and Input.is_action_just_pressed("ui_home"):
-		change_level.call_deferred(load("res://Level.tscn"))
+#func _input(event):
+	#if not multiplayer.is_server():
+		#return
+	#if event.is_action("ui_home") and Input.is_action_just_pressed("ui_home"):
+		#change_level.call_deferred(load("res://Level.tscn"))

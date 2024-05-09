@@ -115,6 +115,7 @@ func _on_weapons_manager_elimination():
 	points+=1
 	if points==2:
 		game_result.rpc(str(multiplayer.get_unique_id()))
+
 @rpc("call_local", "any_peer")
 func game_result(winner):
 	winnerlabel.text= winner+" wins"

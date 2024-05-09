@@ -11,9 +11,7 @@ func _ready():
 	for id in multiplayer.get_peers():
 		add_player(id)
 
-	# Spawn the local player unless this is a dedicated server export.
-	if not OS.has_feature("dedicated_server"):
-		add_player(1)
+	add_player(1)
 
 func _exit_tree():
 	if not multiplayer.is_server(): return

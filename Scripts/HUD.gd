@@ -4,8 +4,8 @@ signal respawn
 @onready var CurrentAmmoLabel : Label = $"VBoxContainer/HBoxContainer2/Current Ammo"
 @onready var CurrentWeaponStack : Label = $"VBoxContainer/HBoxContainer3/Weapon Stack"
 
-@onready var HealthBar = $HUD
-@onready var HUD = $VBoxContainer
+@onready var HUD = $HUD
+@onready var WeaponHUD = $VBoxContainer
 @onready var healthbar = $HUD/HealthBar
 @onready var player = $".."
 @onready var Counter = $HUD/Counter
@@ -33,8 +33,8 @@ func counter(_delta):
 
 func _ready():
 	if player.player == multiplayer.get_unique_id():
-		HealthBar.show()
 		HUD.show()
+		WeaponHUD.show()
 
 func _on_weapons_manager_update_ammo(Ammo):
 	#if player_name == multiplayer.get_unique_id():
