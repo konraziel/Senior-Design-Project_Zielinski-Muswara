@@ -12,7 +12,10 @@ extends MultiplayerSynchronizer
 @export var mouse_move_relative := Vector2()
 
 @onready var player = $".."
-#@onready var camera = $"../PlayerHead/Camera3D"
+
+var rng = RandomNumberGenerator.new()
+var elapsed_time = 0
+var unreliable_flag := false
  
 var mouse_capture = true
 #var mouse_sensitivity = 0.002  # radians/pixel
@@ -20,6 +23,7 @@ var mouse_capture = true
 func _ready():
 	# Only process for the local player.
 	if player.player == multiplayer.get_unique_id():
+		set_replication_interval(0)
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	set_process(get_multiplayer_authority() == multiplayer.get_unique_id())
 	set_process_unhandled_input(get_multiplayer_authority() == multiplayer.get_unique_id())
@@ -56,9 +60,10 @@ func mouse_capture_false():
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 func _process(delta):
+	# Imitating fluctuating latency in network
+	imitate_network_lag(false)
 	# Get the input direction and handle the movement/deceleration.
 	if Input.is_action_just_pressed("alt"):
-		set_replication_interval(0)
 		if mouse_capture == false:
 			mouse_capture_true()
 		elif mouse_capture != false:
@@ -77,3 +82,16 @@ func _process(delta):
 	
 	if Input.is_action_just_pressed("ui_accept"):
 		jump.rpc()
+
+func imitate_network_lag(flag: bool):
+	if not flag: return
+	var random_num = rng.randf()
+	
+	if random_num < .005 and unreliable_flag == false:
+		#print(random_num)
+		unreliable_flag = true
+
+	if unreliable_flag == true:
+		set_replication_interval(random_num*50)
+		#print(get_replication_interval())
+		unreliable_flag = false
