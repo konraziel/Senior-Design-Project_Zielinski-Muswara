@@ -19,8 +19,11 @@ var mouse_capture = true
 
 func _ready():
 	# Only process for the local player.
+	
 	if player.player == multiplayer.get_unique_id():
+		set_replication_interval(0)
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	
 	set_process(get_multiplayer_authority() == multiplayer.get_unique_id())
 	set_process_unhandled_input(get_multiplayer_authority() == multiplayer.get_unique_id())
 
@@ -28,23 +31,23 @@ func _unhandled_input(event: InputEvent):
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		mouse_move_relative = event.relative
 
-@rpc("call_local")
+@rpc("call_local", "unreliable_ordered")
 func jump():
 	jumping = true
 
-@rpc("call_local")
+@rpc("call_local", "unreliable_ordered")
 func shoot():
 	shooting = true
 
-@rpc("call_local")
+@rpc("call_local", "unreliable_ordered")
 func reload():
 	reloading = true
 
-@rpc("call_local")
+@rpc("call_local", "unreliable_ordered")
 func scroll_down():
 	wheel_down = true
 
-@rpc("call_local")
+@rpc("call_local", "unreliable_ordered")
 func scroll_up():
 	wheel_up = true
 

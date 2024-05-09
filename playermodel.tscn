@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://b2ytin0jb30xb"]
+[gd_scene load_steps=26 format=3 uid="uid://b2ytin0jb30xb"]
 
 [ext_resource type="Script" path="res://Scripts/player_test.gd" id="1_kvaqc"]
 [ext_resource type="PackedScene" uid="uid://c1q625ijn10vr" path="res://models/rifle.glb" id="2_disx4"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://Scripts/DebugPanel.gd" id="3_pjivu"]
 [ext_resource type="Resource" uid="uid://c5jg8samrhnvw" path="res://WeaponResources/submachinegun.tres" id="4_1osql"]
 [ext_resource type="PackedScene" uid="uid://cwhjrsrqc2qy6" path="res://models/submachinegun.glb" id="5_l1phk"]
+[ext_resource type="Script" path="res://Scripts/server_sync.gd" id="10_83k6h"]
 [ext_resource type="Script" path="res://Scripts/player_input.gd" id="10_501w8"]
 [ext_resource type="Script" path="res://Scripts/HUD.gd" id="12_hf8j0"]
 
@@ -538,6 +539,7 @@ layout_mode = 2
 
 [node name="ServerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_jwjd1")
+script = ExtResource("10_83k6h")
 
 [node name="PlayerInput" type="MultiplayerSynchronizer" parent="."]
 root_path = NodePath("../ServerSynchronizer")

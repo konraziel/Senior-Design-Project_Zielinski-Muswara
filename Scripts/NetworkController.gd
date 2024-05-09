@@ -78,8 +78,8 @@ func _on_join_button_pressed():
 func start_game():
 	# Hide the UI and unpause to start the game.
 	main_menu.hide()
-	Engine.max_fps = 20
-	Engine.physics_ticks_per_second = 30
+	Engine.max_fps = 60
+	Engine.physics_ticks_per_second = 60
 	
 	# Only change level on the server.
 	# Clients will instantiate the level via the spawner.
