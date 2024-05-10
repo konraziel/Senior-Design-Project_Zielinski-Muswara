@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://Scripts/DebugPanel.gd" id="3_pjivu"]
 [ext_resource type="Resource" uid="uid://c5jg8samrhnvw" path="res://WeaponResources/submachinegun.tres" id="4_1osql"]
 [ext_resource type="PackedScene" uid="uid://cwhjrsrqc2qy6" path="res://models/submachinegun.glb" id="5_l1phk"]
+[ext_resource type="Script" path="res://Scripts/player_material.gd" id="8_yqoyl"]
 [ext_resource type="Script" path="res://Scripts/player_input.gd" id="10_501w8"]
 [ext_resource type="Script" path="res://Scripts/HUD.gd" id="12_hf8j0"]
 
