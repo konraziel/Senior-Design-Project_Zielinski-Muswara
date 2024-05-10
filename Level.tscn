@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://c3ampdyuxblp7"]
+[gd_scene load_steps=8 format=3 uid="uid://c3ampdyuxblp7"]
 
 [ext_resource type="Script" path="res://Scripts/Level.gd" id="1_jy37t"]
 [ext_resource type="PackedScene" uid="uid://bssjacvcu8k3u" path="res://models/map/testing_grounds.tscn" id="1_kxnhf"]
@@ -15,6 +15,10 @@ background_mode = 2
 sky = SubResource("Sky_hleju")
 tonemap_mode = 2
 glow_enabled = true
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ympn6"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_xmpe1"]
 
 [node name="Level" type="Node3D"]
 script = ExtResource("1_jy37t")
@@ -33,3 +37,15 @@ environment = SubResource("Environment_6v7qw")
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://playermodel.tscn")
 spawn_path = NodePath("../Players")
+
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.3106, 5.15213)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+shape = SubResource("CylinderShape3D_ympn6")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+mesh = SubResource("CylinderMesh_xmpe1")
+skeleton = NodePath("../CollisionShape3D")
