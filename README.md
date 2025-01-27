@@ -53,8 +53,5 @@ Players are left to their own weapons and abilities to create interesting plays 
     * Webots
 * Open source models for visuals (some modifications possibly)
 
-## Presenting by end of semester:
-(TBD)
 
-## Next Semester Plan:
-(TBD)
+link:https://docs.google.com/presentation/d/1h_jAz36ysc_U58VkFt13aqls1AmLEaPl05-NcAlaI_s/edit?usp=sharing
